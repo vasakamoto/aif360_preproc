@@ -1,0 +1,22 @@
+
+# TODO
+#   CLEAN DATA
+#       - REMOVE REDUNDANT VARIABLES
+#       - REMOVE COLINEAR VARIABLES
+#       - CHECK PROTECTED ATTRIBUTES DISTRIBUTION
+#       - TRANSFORM CATEGORIES INTO BINARY CATEGORIES
+#
+#   MODULES 
+#       - ETL
+#       - METRICS
+#       - CHARTS
+#       - RF
+#       - RW+RF
+#
+#   GLOBAL VARIABLES
+
+PROTECTED_ATTRIBUTES  = ["race"]#, "sex", "fam_inc"]
+PRIVILEGED_GROUP = [{"race" : 1}]
+UNPRIVILEGED_GROUP = [{"race" : 0}]
+TARGET = "pass_bar"
+FAVORABLE_OUTCOME = [1]
