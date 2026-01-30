@@ -2,23 +2,17 @@
 
 from pathlib import Path
 
-import numpy as np
-from aif360.datasets import StandardDataset, BinaryLabelDataset
-from aif360.algorithms.preprocessing.reweighing import Reweighing
 from pandas import (
     DataFrame,
     read_csv,
-    merge
 )
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OrdinalEncoder
 
 from .configs import (
-    PRIVILEGED_GROUP,
-    UNPRIVILEGED_GROUP,
     TARGET,
-    FAVORABLE_OUTCOME,
-    PROTECTED_ATTRIBUTES
+    SAMPLES,
+    BASE_DATA
 )
 
 def _ingest() -> DataFrame:
@@ -153,16 +147,7 @@ def _process(df : DataFrame) -> DataFrame:
     return df
 
 
-def _samples(df : DataFrame | BinaryLabelDataset) -> dict:
-
-    if isinstance(df, BinaryLabelDataset):
-        XY, XYTV = df.split([0.5], shuffle=True, seed=42)
-        XYT, XYV = XYTV.split([0.5], shuffle=True, seed=42)
-        return {
-            "train" : [XY.features, XY.labels.astype(int).ravel(), XY.instance_weights.flatten()],
-            "test" : [XYT.features, XYT.labels.ravel(), XYT.instance_weights.ravel().flatten()],
-            "validation" : [XYV.features, XYV.labels.ravel(), XYV.instance_weights.ravel().flatten()],
-        }
+def _samples(df : DataFrame) -> None:
 
     c = df.columns.tolist()
     c.remove(TARGET)
@@ -171,41 +156,13 @@ def _samples(df : DataFrame | BinaryLabelDataset) -> dict:
     X_TR, X_VT, y_tr, y_vt = train_test_split(X, y, train_size=0.5, stratify=y, random_state=0)
     X_V, X_T, y_v, y_t = train_test_split(X_VT, y_vt, train_size=0.5, stratify=y_vt, random_state=0)
 
-    return {
-        "train" : [X_TR, y_tr],
-        "test" : [X_T, y_t],
-        "validation" : [X_V, y_v]
-    }
+    SAMPLES["base"] = df
+    SAMPLES["train"] = [X_TR, y_tr]
+    SAMPLES["test"] = [X_T, y_t]
+    SAMPLES["validation"] = [X_V, y_v]
 
 
-def _reweight(samples : dict) -> StandardDataset:
-    odf = merge(samples["train"][0], samples["train"][1], right_index=True, left_index=True) 
-    sds = StandardDataset(
-        odf,
-        label_name=TARGET,
-        favorable_classes=FAVORABLE_OUTCOME,
-        protected_attribute_names=PROTECTED_ATTRIBUTES,
-        privileged_classes=[[p["race"] for p in PRIVILEGED_GROUP]],
-    )
-    rw = Reweighing(
-        privileged_groups=PRIVILEGED_GROUP,
-        unprivileged_groups=UNPRIVILEGED_GROUP,
-    )
-    rw.fit(sds)
-    rw_ds = rw.transform(sds) 
-    return rw_ds
-
-def load() -> dict[str,dict[str,DataFrame] | DataFrame | StandardDataset]:
+def load() -> None:
     df = _ingest()
     df = _process(df)
-    samples = _samples(df)
-    rw_df = _reweight(samples)
-    debiased_samples = _samples(rw_df)
-
-    return {
-        "original_dataframe" : df,
-        "reweighted_dataframe" : rw_df,
-        "original_samples" : samples,
-        "reweighted_samples" : debiased_samples
-    }
-
+    _samples(df)

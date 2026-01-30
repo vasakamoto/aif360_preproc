@@ -1,5 +1,5 @@
 
-from aif360.datasets import BinaryLabelDataset
+from aif360.datasets import BinaryLabelDataset, StandardDataset
 from aif360.algorithms.preprocessing import (
     DisparateImpactRemover,
     LFR,
@@ -7,6 +7,16 @@ from aif360.algorithms.preprocessing import (
     Reweighing,
 )
 from numpy import linspace
+from pandas import merge
+
+from .configs import (
+    PRIVILEGED_GROUP,
+    UNPRIVILEGED_GROUP,
+    TARGET,
+    FAVORABLE_OUTCOME,
+    PROTECTED_ATTRIBUTES,
+    SAMPLES
+)
 
 
 def dir(samples : dict) -> BinaryLabelDataset:
@@ -40,7 +50,5 @@ def rw(samples : dict) -> StandardDataset:
         privileged_groups=PRIVILEGED_GROUP,
         unprivileged_groups=UNPRIVILEGED_GROUP,
     )
-    rw.fit(sds)
-    rw_ds = rw.transform(sds) 
-    return rw_ds
+    return rw.fit_transform(sds)
 
