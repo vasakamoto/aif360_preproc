@@ -68,3 +68,21 @@
         [ ] treinar modelos
         [ ] cuspir métricas e gráficos
 
+
+
+
+# TODO
+   CLEAN DATA
+       - REMOVE REDUNDANT VARIABLES
+       - REMOVE COLINEAR VARIABLES
+       - CHECK PROTECTED ATTRIBUTES DISTRIBUTION
+       - TRANSFORM CATEGORIES INTO BINARY CATEGORIES
+
+   MODULES 
+       - ETL
+       - METRICS
+       - CHARTS
+       - RF
+       - RW+RF
+
+   GLOBAL VARIABLES

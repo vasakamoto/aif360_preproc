@@ -1,20 +1,4 @@
 
-# TODO
-#   CLEAN DATA
-#       - REMOVE REDUNDANT VARIABLES
-#       - REMOVE COLINEAR VARIABLES
-#       - CHECK PROTECTED ATTRIBUTES DISTRIBUTION
-#       - TRANSFORM CATEGORIES INTO BINARY CATEGORIES
-#
-#   MODULES 
-#       - ETL
-#       - METRICS
-#       - CHARTS
-#       - RF
-#       - RW+RF
-#
-#   GLOBAL VARIABLES
-
 from pandas import DataFrame
 
 
@@ -23,6 +7,8 @@ PRIVILEGED_GROUP = [{"race" : 1}]
 UNPRIVILEGED_GROUP = [{"race" : 0}]
 TARGET = "pass_bar"
 FAVORABLE_OUTCOME = [1]
+
+DATASET = DataFrame("./../bar_pass_prediction/bar_pass_prediction.csv")
 
 BASE_DATA = None
 SAMPLES = {
