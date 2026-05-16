@@ -1,0 +1,7 @@
+STUDENT'S T AND MANN-WHITNEY U TEST
+
+|    |   group_a |   group_b |   t_test |   t_test_p_value |   mann_whitney |   mann_whitney_p_value |
+|---:|----------:|----------:|---------:|-----------------:|---------------:|-----------------------:|
+|  0 |         0 |         1 | -21.6696 |      4.5428e-103 |    8.15636e+06 |            1.77445e-87 |
+
+

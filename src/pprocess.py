@@ -99,7 +99,7 @@ def opt(samples: dict, n_bins: int = 10) -> dict:
         _optim_options(),
         unprivileged_groups=UNPRIVILEGED_GROUP,
         privileged_groups=PRIVILEGED_GROUP,
-        verbose=0,
+        verbose=False,
     )
     op.fit(splits["train"])
 

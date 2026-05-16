@@ -1,6 +1,13 @@
 
-from pandas import DataFrame
+from pathlib import Path
 
+from pandas import (
+        read_csv,
+        DataFrame
+)
+
+
+PATH_ROOT = Path(__file__).parent.parent
 
 PROTECTED_ATTRIBUTES  = ["race"]#, "sex", "fam_inc"]
 PRIVILEGED_GROUP = [{"race" : 1}]
@@ -8,7 +15,7 @@ UNPRIVILEGED_GROUP = [{"race" : 0}]
 TARGET = "pass_bar"
 FAVORABLE_OUTCOME = [1]
 
-DATASET = DataFrame("./../bar_pass_prediction/bar_pass_prediction.csv")
+DATASET = read_csv(PATH_ROOT / "bar_pass_prediction/bar_pass_prediction.csv")
 
 BASE_DATA = None
 SAMPLES = {

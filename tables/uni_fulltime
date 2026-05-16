@@ -1,0 +1,16 @@
+| fulltime   |   abs_frequency |   rel_frequency |
+|:-----------|----------------:|----------------:|
+| 1          |           20653 |           92.17 |
+| 2          |            1720 |            7.68 |
+| <NA>       |              34 |            0.15 |
+
+average = 1.076878380190408
+
+median = 1.0
+
+mode = 0    1
+Name: fulltime, dtype: Int64
+
+variance = 0.07097126703345691
+
+amplitude = 1

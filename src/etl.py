@@ -1,168 +1,87 @@
 
+from pandas import DataFrame
 
-from pathlib import Path
+def run(df : DataFrame) -> DataFrame:
 
-from pandas import (
-    DataFrame,
-    read_csv,
-)
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import OrdinalEncoder
+    data = df.drop(columns=[
+        "decile1",                  # deciles from zfygpa
+        "decile1b",                 # deciles from zfygpa
+        "decile3",                  # deciles from gpa
+        "ID",                       # unique identifier for instances
+        "Dropout",                  # ???
+        "grad",                     # ???
+        "cluster",                  # reordered tier
+        "parttime",                 # fulltime inverted
+        "sex",                      # label encoding from gender
+        "gender",                   # nominal for male 
+        "race1",                    # nominal for race
+        "race2",                    # grouped hisp, asian and other into other
+        "asian",                    # hot encoded from race1
+        "black",                    # hot encoded from race1
+        "hisp",                     # hot encoded from race1
+        "other",                    # hot encoded from race1
+        "bar_passed",               # boolean for pass_bar
+        "bar",                      # nominal for approval by attempt
+        "bar1",                     # nominal for pass_bar
+        "bar2",                     # nominal for pass_bar
+        "index6040",                # derived from lsat
+        "indxgrp",                  # grouped index6040
+        "indxgrp2",                 # grouped index6040
+        "gpa",                      # same as ugpa
+        "dnn_bar_pass_prediction",  # prediction for deep neural networks
+        "DOB_yr",                   # birth year
+        "bar2_yr",                  # year of approval
+        "age",                      # ??? but derived from 
+        "bar1_yr",                  # difference between age and DOB_yr
+        ])
 
-from .configs import (
-    TARGET,
-    SAMPLES,
-    BASE_DATA
-)
-
-def _ingest() -> DataFrame:
-    path_csv = Path().cwd() / "tcc/bar_pass_prediction/bar_pass_prediction.csv"
-    return read_csv(
-        path_csv,
-        index_col="ID",
-        encoding="utf-8",
-    )
-
-
-def _process(df : DataFrame) -> DataFrame:
-
-    df.dropna(inplace=True)
-    
-    # drop redundant and colinear attributes
-    dcolumns = [
-        # redundant
-        "asian",                            # hot encoded race
-        "bar",                              # categorization of passage by tries
-        "bar1",                             # the model evaluates bar passage, not if passed on first try
-        "bar2",                             # idem
-        "bar_passed",                       # boolean for pass_bar
-        "black",                            # hot encoded race
-        "cluster",                          # reordering of tier
-        "decile1b",                         # not the same as decile1, but there is almost no variance
-        "Dropout",                          # inverse of grad
-        "gender",                           # categorization of sex with string
-        "hisp",                             # hot encoded race
-        "indxgrp",                          # categorization of index6040
-        "indxgrp2",                         # subcategorization of index6040
-        "male",                             # hot encoded sex
-        "other",                            # hot encoded race
-        "parttime",                         # inverse of fulltime
-        "race1",                            # categorization of race with string
-        "race2",                            # subcategorization of race with string 
-        "ugpa",                             # same as gpa
-
-        # colinear
-        "decile1",                          # zfygpa
-        "decile3",                          # zgpa
-
-        # useless
-        "dnn_bar_pass_prediction",          # prediction with dnn
-        "grad",                             # all values are true
-
-        # not sure what is exactly
-        "age",                              # have no clue
-        "bar1_yr",                          # DOB_yr - age, but what does it means...
-        #"index6040",                       # how this was calculated??
-        #"zfygpa",                          # how this was calculated??
-        #"zgpa",                            # how this was calculated?? 
-
-        # not sure if is useful
-        "bar2_yr",                         # year of aprovation
-        "DOB_yr",                          # birth year
-
-        # selected features
-        #"fam_inc",                         # ordered categorization of family income
-        #"fulltime",                        # if is fulltime student
-        #"gpa",                             # grade point average
-        #"lsat",                            # score at law school admission test
-        #"pass_bar",                        # target
-        #"race",                            # non binary category
-        #"sex",                             # binary category
-        #"tier",                            # ordered categorization of institution grouped by averages in lsat and gpa
-    ]
-    df.drop(columns=dcolumns, inplace=True)
-
-    # type columns
-    types = {
-        # redundant
-        #"asian"                     :   "category",
-        #"bar"                       :   "category",
-        #"bar1"                      :   "category",
-        #"bar2"                      :   "category",
-        #"bar_passed"                :   "category",
-        #"black"                     :   "category",
-        #"cluster"                   :   "int8",
-        #"decile1b"                  :   "int8",
-        #"Dropout"                   :   "category",
-        #"gender"                    :   "category",
-        #"hisp"                      :   "category",
-        #"indxgrp"                   :   "category",
-        #"indxgrp2"                  :   "category",
-        #"male"                      :   "category",
-        #"other"                     :   "category",
-        #"parttime"                  :   "category",
-        #"race1"                     :   "category",
-        #"race2"                     :   "category",
-        #"ugpa"                      :   "float32",
-
-        # colinear
-        #"decile1"                   :   "int8",
-        #"decile3"                   :   "int8",
-
-        # useless
-        #"grad"                      :   "category",
-        #"dnn_bar_pass_prediction"   :   "float32",
-
-        # not sure what is exactly
-        #"age"                       :   "int8",
-        #"bar1_yr"                   :   "int8",
-        "index6040"                 :   "float32",
-        "zfygpa"                    :   "float32",
-        "zgpa"                      :   "float32",
-
-        # not sure if is useful
-        #"bar2_yr"                   :   "int8",
-        #"DOB_yr"                    :   "int8",
-
-        # selected features
-        "fam_inc"                   :   "category",
-        "fulltime"                  :   "category",
-        "gpa"                       :   "float32",
-        "lsat"                      :   "float32",
-        "pass_bar"                  :   "category",
-        "race"                      :   "int8",
-        "sex"                       :   "int8",
-        "tier"                      :   "category",
-    }
-    df = df.astype(types)
-
-    # encode categoric columns
-    cat_columns = df.select_dtypes(include="category").columns.tolist()
-    cat_encoder = OrdinalEncoder()
-    df[cat_columns] = cat_encoder.fit_transform(df[cat_columns])
-
-    # transform race into binary category (white, non-white)
-    df['race'] = df['race'].apply(lambda x : 0 if x != 7 else 1)
-
-    return df
+    # transform bar2_yr and DOB_yr into age of approval
+    data["age"] = df["bar2_yr"] - df["DOB_yr"]
 
 
-def _samples(df : DataFrame) -> None:
+    # changing race to binary "is white?"
+    #data["race"] = data["race"].apply(lambda x : 0 if x != 7.0 else 1)
 
-    c = df.columns.tolist()
-    c.remove(TARGET)
-    X = df[c]
-    y = df[TARGET]
-    X_TR, X_VT, y_tr, y_vt = train_test_split(X, y, train_size=0.5, stratify=y, random_state=0)
-    X_V, X_T, y_v, y_t = train_test_split(X_VT, y_vt, train_size=0.5, stratify=y_vt, random_state=0)
+    # categorize age
+    # that is because when the population is very small the variance can be huge, and
+    # is the case here, with population older then 50 have 184 individuals with a huge
+    # variance, from 12% of reprovation to 100%
 
-    SAMPLES["base"] = df
-    SAMPLES["train"] = [X_TR, y_tr]
-    SAMPLES["test"] = [X_T, y_t]
-    SAMPLES["validation"] = [X_V, y_v]
+    #def group_age(a : float) -> int:
+    #    if a >= 49.99:
+    #        return 8 # 50+
+    #    if a >= 44.99 and a <= 50.00:
+    #        return 7 # 45 ~ 50
+    #    if a >= 39.99 and a <= 45.00:
+    #        return 6 # 40 ~ 45
+    #    if a >= 34.99 and a <= 40.00:
+    #        return 5 # 35 ~ 40
+    #    if a >= 29.99 and a <= 35.00:
+    #        return 4 # 30 ~ 35
+    #    if a >= 26.99 and a <= 30.00:
+    #        return 3 # 27 ~ 30
+    #    if a >= 24.99 and a <= 28.00:
+    #        return 2 # 25 ~ 27
+    #    else:
+    #        return 1 # 25-
+    #data["age"] = data["age"].apply(group_age)
 
 
-def load() -> None:
-    df = _ingest()
-    df = _process(df)
-    _samples(df)
+    # type correctly
+    def should_be_int(v : float) -> bool:
+        try:
+            if int(v) == v:
+                return True
+            return False
+        except:
+            return False
+
+    for c in data.columns:
+        if data[c].dropna().apply(should_be_int).all():
+            data[c] = data[c].astype("Int64")
+
+    data["age"] = data["age"].astype("float64")
+
+
+    return data
+

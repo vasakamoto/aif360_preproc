@@ -1,7 +1,0 @@
-#   TODO
-#       STATISTICAL PARITY DIFFERENCE
-#           ( categorize group on other score indicators )
-#       DISPARATE IMPACT
-#       POPULATION DISTRIBUTION
-#           VARIANCE, AVERAGE, ETC. OVER OTHER VARIABLES
-#           ABSOLUTE AND RELATIVE FREQUENCY OVER OTHER VARIABLES

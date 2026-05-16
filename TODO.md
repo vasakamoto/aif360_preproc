@@ -1,4 +1,18 @@
 
+Usar one hot encode (OHE) para treinamento, as categorias possuem baixa cardinalidade
+e o modelo tende a lidar melhor com variáveis binárias ao invés de ordinais.
+
+Checar o impacto de algumas variáveis sobre o modelo
+    - male
+    - fulltime
+    - fam_inc
+
+# FAZENDO
+
+    - EDA
+        ( matriz de correlação para identificar variáveis categoricas redundantes )
+        ( matriz de correlação para identificar variáveis continuas redundantes )
+
 
 # MONOGRAFIA PRINCIPAL
 
