@@ -1,26 +1,50 @@
 
+from dataclasses import dataclass
 from pathlib import Path
 
-from pandas import (
-        read_csv,
-        DataFrame
-)
+from pandas import read_csv
+from aif360.algorithms import Transformer
+from aif360.datasets import BinaryLabelDataset
 
 
 PATH_ROOT = Path(__file__).parent.parent
 
-PROTECTED_ATTRIBUTES  = ["race"]#, "sex", "fam_inc"]
-PRIVILEGED_GROUP = [{"race" : 1}]
-UNPRIVILEGED_GROUP = [{"race" : 0}]
+PROTECTED_ATTRIBUTES  = ["race"]
+PRIVILEGED_GROUP = [
+        {"race" : 2},
+        {"race" : 7},
+        ]
+UNPRIVILEGED_GROUP = [
+        {"race" : 0},
+        {"race" : 1},
+        {"race" : 3},
+        {"race" : 4},
+        {"race" : 5},
+        {"race" : 6},
+        {"race" : 8},
+        ]
 TARGET = "pass_bar"
-FAVORABLE_OUTCOME = [1]
+FAVORABLE_OUTCOME = 1
 
-DATASET = read_csv(PATH_ROOT / "bar_pass_prediction/bar_pass_prediction.csv")
+DATASET = read_csv(PATH_ROOT / "dataset/bar_pass_prediction.csv")
 
-BASE_DATA = None
-SAMPLES = {
-    "base" : DataFrame,
-    "train" : list(),
-    "test" :  list(),
-    "validation" : list()
-}
+# YEAH, IT WOULD BE GREAT TO SEPARATE MODELS FROM OTHER KEY CONFIGS, BUT... I THOUGHT
+# IT WOULD BE CONFUSING
+@dataclass
+class ProcessedDataset:
+    original            : BinaryLabelDataset
+    preprocess_model    : Transformer
+    transformed         : BinaryLabelDataset | None = None
+
+@dataclass
+class GroupedProcessedDatasets:
+    reweighing                      : ProcessedDataset
+    disparate_impact_remover        : ProcessedDataset
+    learning_fair_representations   : ProcessedDataset
+    optimized_preprocessing         : ProcessedDataset | None
+
+@dataclass
+class SplitDataset:
+    train       : BinaryLabelDataset | GroupedProcessedDatasets
+    test        : BinaryLabelDataset | GroupedProcessedDatasets
+    validation  : BinaryLabelDataset | GroupedProcessedDatasets
