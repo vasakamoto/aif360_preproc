@@ -5,6 +5,7 @@ from pathlib import Path
 from pandas import read_csv
 from aif360.algorithms import Transformer
 from aif360.datasets import BinaryLabelDataset
+from sklearn.ensemble import RandomForestClassifier
 
 
 PATH_ROOT = Path(__file__).parent.parent
@@ -32,7 +33,6 @@ DATASET = read_csv(PATH_ROOT / "dataset/bar_pass_prediction.csv")
 # IT WOULD BE CONFUSING
 @dataclass
 class ProcessedDataset:
-    original            : BinaryLabelDataset
     preprocess_model    : Transformer
     transformed         : BinaryLabelDataset | None = None
 
@@ -45,6 +45,16 @@ class GroupedProcessedDatasets:
 
 @dataclass
 class SplitDataset:
-    train       : BinaryLabelDataset | GroupedProcessedDatasets
-    test        : BinaryLabelDataset | GroupedProcessedDatasets
-    validation  : BinaryLabelDataset | GroupedProcessedDatasets
+    train                   : BinaryLabelDataset
+    test                    : BinaryLabelDataset
+    validation              : BinaryLabelDataset
+    processed_train         : GroupedProcessedDatasets | None
+    processed_test          : GroupedProcessedDatasets | None
+    processed_validation    : GroupedProcessedDatasets | None
+
+@dataclass
+class TrainedModels:
+    raw                             : RandomForestClassifier
+    reweighing                      : RandomForestClassifier
+    disparate_impact_remover        : RandomForestClassifier
+    learning_fair_representations   : RandomForestClassifier

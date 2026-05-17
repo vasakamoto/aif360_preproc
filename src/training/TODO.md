@@ -5,13 +5,13 @@
     [x] DISPARATE IMPACT REMOVER        (DIR)
     [x] LEARNING FAIR REPRESENTATIONS   (LFR)
     [x] OPTIMIZED PREPROCESSING         (OPP)
-    [x] REWEIGHING                      (RWG)
-[ ] TRAIN RANDOM FORESTS
-    [ ] NAKED MODEL
-    [ ] DIR
-    [ ] LFR
+    [ ] REWEIGHING                      (RWG)
+[x] TRAIN RANDOM FORESTS
+    [x] NAKED MODEL
+    [x] RWG
+    [x] DIR
+    [x] LFR
     [ ] OPP
-    [ ] RWT
 [ ] EVALUATE RESULTS
     [ ] STANDARD METRICS
         [ ] ACCURACY
@@ -51,3 +51,4 @@
         [ ] ADVERSARIAL ACCURACY (Can a shadow model predict 'A' from 'Y_hat'?)
         [ ] DELTA AUC (Threshold-invariant performance gap)
 
+[ ] TUNE MODELS AND METHODS

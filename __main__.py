@@ -21,7 +21,7 @@ from src import (
 if __name__ == "__main__":
     stime = perf_counter()
     df = etl.run(configs.DATASET)
-    eda.execute(df)
+    #eda.execute(df)
     training.execute(df)
     etime = perf_counter()
     print(f"\n\nEXECUTION TIME: {etime - stime:.3f}")

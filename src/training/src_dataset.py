@@ -18,22 +18,25 @@ def src_dataset(df : DataFrame) -> SplitDataset:
     df_valid, df_test = train_test_split(df_test, test_size=0.5, random_state=42)
 
     return SplitDataset(
-            BinaryLabelDataset(
+            train=BinaryLabelDataset(
                 df=df_train,
                 label_names=[TARGET],
                 favorable_label=FAVORABLE_OUTCOME,
                 protected_attribute_names=PROTECTED_ATTRIBUTES
                 ),
-            BinaryLabelDataset(
+            test=BinaryLabelDataset(
                 df=df_test,
                 label_names=[TARGET],
                 favorable_label=FAVORABLE_OUTCOME,
                 protected_attribute_names=PROTECTED_ATTRIBUTES
                 ),
-            BinaryLabelDataset(
+            validation=BinaryLabelDataset(
                 df=df_valid,
                 label_names=[TARGET],
                 favorable_label=FAVORABLE_OUTCOME,
                 protected_attribute_names=PROTECTED_ATTRIBUTES
                 ),
+            processed_train=None,
+            processed_test=None,
+            processed_validation=None
             )

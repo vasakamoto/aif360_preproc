@@ -32,7 +32,6 @@ def _reweighing(ds : BinaryLabelDataset, training : bool) -> ProcessedDataset:
     transformed = preprocess.transform(ds_copy) if training else None
 
     return ProcessedDataset(
-            ds,
             preprocess,
             transformed
             )
@@ -49,7 +48,6 @@ def _disparate_impact_remover(ds : BinaryLabelDataset, training : bool, **kwargs
     transformed = preprocess.fit_transform(ds_copy) if training else None
 
     return ProcessedDataset(
-            ds,
             preprocess,
             transformed
             )
@@ -72,7 +70,6 @@ def _learning_fair_representations(ds : BinaryLabelDataset, training : bool, **k
     transformed = preprocess.transform(ds_copy) if training else None
 
     return ProcessedDataset(
-            ds,
             preprocess,
             transformed
             )
@@ -141,7 +138,6 @@ def _optimized_preprocessing(ds : BinaryLabelDataset, training : bool,
     transformed = preprocess.transform(ds_copy) if training else None
 
     return ProcessedDataset(
-            ds,
             preprocess,
             transformed
             )
@@ -159,7 +155,7 @@ def _process(ds : BinaryLabelDataset, training : bool, continuous : list[str], *
 def preprocess(split_ds : SplitDataset) -> None:
 
     continuous_feat = ["lsat", "zgpa"]
-    split_ds.train = _process(split_ds.train, True, continuous_feat)
-    split_ds.test = _process(split_ds.test, False, continuous_feat)
-    split_ds.validation = _process(split_ds.validation, False, continuous_feat)
+    split_ds.processed_train = _process(split_ds.train, True, continuous_feat)
+    split_ds.processed_test = _process(split_ds.test, False, continuous_feat)
+    split_ds.processed_validation = _process(split_ds.validation, False, continuous_feat)
 
