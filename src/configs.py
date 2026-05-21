@@ -32,9 +32,17 @@ DATASET = read_csv(PATH_ROOT / "dataset/bar_pass_prediction.csv")
 # YEAH, IT WOULD BE GREAT TO SEPARATE MODELS FROM OTHER KEY CONFIGS, BUT... I THOUGHT
 # IT WOULD BE CONFUSING
 @dataclass
+class SplitDataset:
+    train                   : BinaryLabelDataset
+    test                    : BinaryLabelDataset
+    validation              : BinaryLabelDataset
+
+@dataclass
 class ProcessedDataset:
-    preprocess_model    : Transformer
-    transformed         : BinaryLabelDataset | None = None
+    preprocess_model        : Transformer
+    transformed_train       : BinaryLabelDataset
+    transformed_test        : BinaryLabelDataset
+    transformed_validation  : BinaryLabelDataset
 
 @dataclass
 class GroupedProcessedDatasets:
@@ -42,15 +50,6 @@ class GroupedProcessedDatasets:
     disparate_impact_remover        : ProcessedDataset
     learning_fair_representations   : ProcessedDataset
     optimized_preprocessing         : ProcessedDataset | None
-
-@dataclass
-class SplitDataset:
-    train                   : BinaryLabelDataset
-    test                    : BinaryLabelDataset
-    validation              : BinaryLabelDataset
-    processed_train         : GroupedProcessedDatasets | None
-    processed_test          : GroupedProcessedDatasets | None
-    processed_validation    : GroupedProcessedDatasets | None
 
 @dataclass
 class TrainedModels:

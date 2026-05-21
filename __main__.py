@@ -10,6 +10,7 @@ from src import (
         #    charts,
         configs,
         etl,
+        evaluation,
         eda,
         training
         #    models,
@@ -22,7 +23,8 @@ if __name__ == "__main__":
     stime = perf_counter()
     df = etl.run(configs.DATASET)
     #eda.execute(df)
-    training.execute(df)
+    t = training.execute(df)
+    evaluation.metrics(t["models"], t["grouped_ds"], t["split_ds"])
     etime = perf_counter()
     print(f"\n\nEXECUTION TIME: {etime - stime:.3f}")
 

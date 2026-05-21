@@ -1,0 +1,51 @@
+STATISTICAL PARITY DIFFERENCE AND DISPARATE IMPACT
+
+|    | method                        |   before_spd |   before_di |   after_spd |   after_di |   delta_di |   delta_spd |
+|---:|:------------------------------|-------------:|------------:|------------:|-----------:|-----------:|------------:|
+|  0 | reweighing                    |       -0.352 |       0.522 |       0     |      1     |      0.478 |       0.352 |
+|  1 | disparate_impact_remover      |       -0.352 |       0.522 |      -0.352 |      0.522 |      0     |       0     |
+|  2 | learning_fair_representations |       -0.352 |       0.522 |      -0.479 |      0.443 |     -0.079 |      -0.127 |
+
+____________________________________________________________________________________________________
+
+WASSERSTEIN DISTANCE
+
+|    | method                        | var    |   wasserstein_distance_before |   wasserstein_distance_after |   wasserstein_distance_delta |
+|---:|:------------------------------|:-------|------------------------------:|-----------------------------:|-----------------------------:|
+|  0 | reweighing                    | lsat   |                      7.15204  |                     7.15204  |                    0         |
+|  1 | disparate_impact_remover      | lsat   |                      7.15204  |                     3.49595  |                   -3.65609   |
+|  2 | learning_fair_representations | lsat   |                      7.15204  |                     5.26518  |                   -1.88686   |
+|  3 | reweighing                    | ugpa   |                      0.296909 |                     0.296909 |                    0         |
+|  4 | disparate_impact_remover      | ugpa   |                      0.296909 |                     0.263114 |                   -0.0337952 |
+|  5 | learning_fair_representations | ugpa   |                      0.296909 |                     0.274353 |                   -0.0225566 |
+|  6 | reweighing                    | zfygpa |                      0.78049  |                     0.78049  |                    0         |
+|  7 | disparate_impact_remover      | zfygpa |                      0.78049  |                     0.157621 |                   -0.622869  |
+|  8 | learning_fair_representations | zfygpa |                      0.78049  |                     0.496783 |                   -0.283707  |
+|  9 | reweighing                    | zgpa   |                      0.884601 |                     0.884601 |                    0         |
+| 10 | disparate_impact_remover      | zgpa   |                      0.884601 |                     0.147732 |                   -0.736869  |
+| 11 | learning_fair_representations | zgpa   |                      0.884601 |                     0.608533 |                   -0.276068  |
+| 12 | reweighing                    | age    |                      0.820504 |                     0.820504 |                    0         |
+| 13 | disparate_impact_remover      | age    |                      0.820504 |                     1.77596  |                    0.955452  |
+| 14 | learning_fair_representations | age    |                      0.820504 |                     0.881271 |                    0.0607675 |
+
+____________________________________________________________________________________________________
+
+ATTRIBUTE-TARGET MUTUAL INFORMATION
+
+|    | method                        | var    |   mi_before |   mi_after |   mi_delta |
+|---:|:------------------------------|:-------|------------:|-----------:|-----------:|
+|  0 | reweighing                    | lsat   |     0.12234 |    0.12234 |    0       |
+|  1 | reweighing                    | ugpa   |     0.03209 |    0.03209 |    0       |
+|  2 | reweighing                    | zfygpa |     0.13613 |    0.13613 |    0       |
+|  3 | reweighing                    | zgpa   |     0.19857 |    0.19857 |    0       |
+|  4 | reweighing                    | age    |     0.03019 |    0.03019 |    0       |
+|  5 | disparate_impact_remover      | lsat   |     0.12234 |    0.08692 |   -0.03542 |
+|  6 | disparate_impact_remover      | ugpa   |     0.03209 |    0.03034 |   -0.00175 |
+|  7 | disparate_impact_remover      | zfygpa |     0.13613 |    0.08626 |   -0.04986 |
+|  8 | disparate_impact_remover      | zgpa   |     0.19857 |    0.10304 |   -0.09554 |
+|  9 | disparate_impact_remover      | age    |     0.03019 |    0.05009 |    0.0199  |
+| 10 | learning_fair_representations | lsat   |     0.12234 |    0.52824 |    0.40589 |
+| 11 | learning_fair_representations | ugpa   |     0.03209 |    0.27799 |    0.2459  |
+| 12 | learning_fair_representations | zfygpa |     0.13613 |    0.43781 |    0.30169 |
+| 13 | learning_fair_representations | zgpa   |     0.19857 |    0.3989  |    0.20032 |
+| 14 | learning_fair_representations | age    |     0.03019 |    0.17331 |    0.14312 |

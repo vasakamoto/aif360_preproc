@@ -3,7 +3,7 @@ from aif360.datasets import BinaryLabelDataset
 from numpy import False_
 from sklearn.ensemble import RandomForestClassifier
 
-from src.configs import SplitDataset, TrainedModels
+from src.configs import GroupedProcessedDatasets, SplitDataset, TrainedModels
 
 
 def _rf(ds: BinaryLabelDataset, use_weights: bool) -> RandomForestClassifier:
@@ -29,11 +29,11 @@ def _rf(ds: BinaryLabelDataset, use_weights: bool) -> RandomForestClassifier:
     return model
 
 
-def train(split_ds : SplitDataset) -> TrainedModels:
+def train(raw : SplitDataset, grouped_ds : GroupedProcessedDatasets) -> TrainedModels:
 
     return TrainedModels(
-            raw=_rf(split_ds.train, False),
-            reweighing=_rf(split_ds.processed_train.reweighing.transformed, True),
-            disparate_impact_remover=_rf(split_ds.processed_train.disparate_impact_remover.transformed, True),
-            learning_fair_representations=_rf(split_ds.processed_train.learning_fair_representations.transformed, True),
+            raw=_rf(raw.train, False),
+            reweighing=_rf(grouped_ds.reweighing.transformed_train, True),
+            disparate_impact_remover=_rf(grouped_ds.disparate_impact_remover.transformed_train, True),
+            learning_fair_representations=_rf(grouped_ds.learning_fair_representations.transformed_train, True),
             )
