@@ -1,12 +1,4 @@
 
-Usar one hot encode (OHE) para treinamento, as categorias possuem baixa cardinalidade
-e o modelo tende a lidar melhor com variáveis binárias ao invés de ordinais.
-
-Checar o impacto de algumas variáveis sobre o modelo
-    - male
-    - fulltime
-    - fam_inc
-
 # FAZENDO
 
     - EDA
@@ -60,43 +52,3 @@ Checar o impacto de algumas variáveis sobre o modelo
     [ ] CONCLUSÃO
 
 
-# MONOGRAFIA SECUNDÁRIO
-    [ ] VERIFICAR FORMATAÇÃO E ELEMENTOS OBRIGATÓRIOS (CAPA, SUMÁRIO, ETC.)
-
-
-# EXPERIMENTO
-    [ ] Encontrar datasets com características diferentes
-        [ ] classes desbanlanceadas (poucas amostras p/ uma classe)
-        [ ] representation bias (sub representação de um grupo)
-        [ ] dataset com alta dimensionalidade
-        [ ] dataset com baixa dimensionalidade
-    [ ] EDA
-        [ ] frequência relativa dos grupos (representation analysis)
-        [ ] frequência relativa da variável alvo e do grupo (disparidade entre grupos, disparate impact, parity difference)
-        [ ] matriz de correlação (proxy analysis)
-        [ ] frequência de valores nulos e vazios
-        [ ] variância de variáveis por grupo
-    [ ] Pipeline
-        [ ] ETL
-        [ ] pré processamento
-        [ ] treinar modelos
-        [ ] cuspir métricas e gráficos
-
-
-
-
-# TODO
-   CLEAN DATA
-       - REMOVE REDUNDANT VARIABLES
-       - REMOVE COLINEAR VARIABLES
-       - CHECK PROTECTED ATTRIBUTES DISTRIBUTION
-       - TRANSFORM CATEGORIES INTO BINARY CATEGORIES
-
-   MODULES 
-       - ETL
-       - METRICS
-       - CHARTS
-       - RF
-       - RW+RF
-
-   GLOBAL VARIABLES
