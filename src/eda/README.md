@@ -399,8 +399,124 @@ course, zgpa will be the variable that best "hides" (or encodes) those difficult
 # BIVARIATE ANALYSIS
 
 Looking at univariate analysis we can see that some attributes might be proxies for 
-bias, such as fam_inc, tier, fulltime
+bias, such as **fam_inc**, **tier**, **fulltime**. Also, there are some features that
+might bias the model such as **gender**, **race** and **age**, so, first let's check
+if there might have some direct bias towards these features.
 
+
+## PREDICTIVE FEATURES
+
+Before we take a look at these features that can carry some direct bias, we shall look
+at features that in are directly used to evaluate student performance, such as **lsat**,
+**ugpa**, **zfygpa**, **zgpa**. To evaluate if these features are dependent of each
+other was calculated the pearson matrix as the following:
+
+**PEARSON MATRIX**
+|        |      lsat |      ugpa |     zfygpa |       zgpa |
+|:-------|----------:|----------:|-----------:|-----------:|
+| lsat   |  1        |  0.243069 |  0.281868  |  0.295502  |
+| ugpa   |  0.243069 |  1        |  0.173866  |  0.224647  |
+| zfygpa |  0.281868 |  0.173866 |  1         |  0.871557  |
+| zgpa   |  0.295502 |  0.224647 |  0.871557  |  1         |
+
+There is a strong correlation between zfygpa and zgpa, which makes sense, after all
+the gpa at the first year is used to compute the overall gpa, in such way, this feature
+can be discarded. This correlation can be illustrated by the scatter plot bellow:
+
+![Scatter plot zfygpa vs zgpa](../../results/charts/bivariate/scatter_zfygpa_zgpa.png)
+
+Running Student's and Mann-Whitney test to check if groups within these features have
+the same outcome, which would indicate that this feature has no correlation with 
+**pass_bar**.
+
+**STUDENT'S T AND MANN-WHITNEY U TEST**
+**lsat X pass_bar**
+|    |   group_a |   group_b |   t_test |   t_test_p_value |   mann_whitney |   mann_whitney_p_value |
+|---:|----------:|----------:|---------:|-----------------:|---------------:|-----------------------:|
+|  0 |         0 |         1 | -36.7515 |     3.58197e-287 |     5.9824e+06 |           1.60136e-196 |
+
+**ugpa X pass_bar**
+|    |   group_a |   group_b |   t_test |   t_test_p_value |   mann_whitney |   mann_whitney_p_value |
+|---:|----------:|----------:|---------:|-----------------:|---------------:|-----------------------:|
+|  0 |         0 |         1 | -21.6696 |      4.5428e-103 |    8.15636e+06 |            1.77445e-87 |
+
+**zgpa X pass_bar**
+|    |   group_a |   group_b |   t_test |   t_test_p_value |   mann_whitney |   mann_whitney_p_value |
+|---:|----------:|----------:|---------:|-----------------:|---------------:|-----------------------:|
+|  0 |         0 |         1 | -42.1869 |                0 |    3.32412e+06 |                      0 |
+
+Looking at these values, it is clear that these variables have some correlation with 
+**pass_bar**.
+
+
+## RACE
+
+First, checking the contigency table with **pass_bar** we have the following:
+
+|           |   abs_frequency |   rel_frequency_tot |   rel_f_race_by_pass_bar |   rel_f_pass_bar_by_race |
+|:----------|----------------:|--------------------:|-------------------------:|-------------------------:|
+| (1, 0)    |              19 |                0.08 |                 18.0952  |                1.62532   |
+| (1, 1)    |              86 |                0.38 |                 81.9048  |                0.404935  |
+| (2, 0)    |              70 |                0.31 |                  7.80379 |                5.98802   |
+| (2, 1)    |             827 |                3.69 |                 92.1962  |                3.89396   |
+| (3, 0)    |             298 |                1.33 |                 22.1891  |               25.4919    |
+| (3, 1)    |            1045 |                4.66 |                 77.8109  |                4.92043   |
+| (4, 0)    |              46 |                0.21 |                 11.6162  |                3.93499   |
+| (4, 1)    |             350 |                1.56 |                 88.3838  |                1.64799   |
+| (5, 0)    |              26 |                0.12 |                 20.8     |                2.22412   |
+| (5, 1)    |              99 |                0.44 |                 79.2     |                0.466146  |
+| (6, 0)    |              56 |                0.25 |                 11.0672  |                4.79042   |
+| (6, 1)    |             450 |                2.01 |                 88.9328  |                2.11884   |
+| (7, 0)    |             629 |                2.81 |                  3.36076 |               53.8067    |
+| (7, 1)    |           18087 |               80.72 |                 96.6392  |               85.1634    |
+| (8, 0)    |              23 |                0.1  |                  7.59076 |                1.96749   |
+| (8, 1)    |             280 |                1.25 |                 92.4092  |                1.31839   |
+| (<NA>, 0) |               2 |                0.01 |                nan       |                0.171086  |
+| (<NA>, 1) |              14 |                0.06 |                nan       |                0.0659196 |
+
+![Stacked bar race by pass_bar](../../results/charts/bivariate/stacked_race_pass_bar.png)
+
+25.49% of those that failed the bar exam where from group 3 (black) and that this group
+have a failure rate of 22.19% within this group. This by itself might skew the prediction
+for this group. We have other groups such 1 (indigenous folk) and 5 (mexican) that have
+high failure rates, 18.10% and 20.80% respective, and having such a few samples makes
+it a more instable group. To check if it has statistical significance it was used 
+chi-square test to check independency between race and approval.
+
+|   race |     1 |   0 |   expected_1 |   expected_0 |   delta_1 |   delta_0 |
+|-------:|------:|----:|-------------:|-------------:|----------:|----------:|
+|      7 | 18087 | 629 |        17740 |          975 |       347 |      -346 |
+|      4 |   350 |  46 |          375 |           20 |       -25 |        26 |
+|      2 |   827 |  70 |          850 |           46 |       -23 |        24 |
+|      3 |  1045 | 298 |         1273 |           69 |      -228 |       229 |
+|      6 |   450 |  56 |          479 |           26 |       -29 |        30 |
+|      8 |   280 |  23 |          287 |           15 |        -7 |         8 |
+|      1 |    86 |  19 |           99 |            5 |       -13 |        14 |
+|      5 |    99 |  26 |          118 |            6 |       -19 |        20 |
+
+**Chi squared**: 1093.7736
+
+**P-value**: 0.0000
+
+Such a low value for **p-value** might indicates that the null hypothesis is discarted and
+conclude that it has some dependency between these variables. But, chi-square might be
+influenced by sample size, to be sure of this impact it was calculated the **Cramer's
+V** which resulted in a value of 0.220314, meaning that this feature have a moderate
+dependency.
+
+To check if this dependency can be justified by the predictive features or if this
+dependency is arbitrary to see if this possible bias originates from some socioeconomic
+/ historical bias or if there is some direct bias towards these groups.
+
+Looking at the **Kruskal-Wallis** test to check if 
+
+| label   |       p_race |   s_race |
+|:--------|-------------:|---------:|
+| lsat    | 0            | 2343.53  |
+| ugpa    | 9.94951e-212 | 1000.38  |
+| zfygpa  | 0            | 1819.33  |
+| zgpa    | 0            | 2014.31  |
+| age     | 2.9028e-19   | 102.759  |
 
 
 # MULTIVARIATE ANALYSIS

@@ -30,12 +30,12 @@ CONFUSION MATRIX RAW TRUE METRICS
 
 |    | /             |   PREDICTED NEGATIVE |   PREDICTED POSITIVE |
 |---:|:--------------|---------------------:|---------------------:|
-|  0 | REAL NEGATIVE |                    3 |                    0 |
+|  0 | REAL NEGATIVE |                    3 |                   34 |
 |  1 | REAL POSITIVE |                    0 |                  780 |
 
 |    | /             |   PREDICTED NEGATIVE |   PREDICTED POSITIVE |
 |---:|:--------------|---------------------:|---------------------:|
-|  0 | REAL NEGATIVE |                   15 |                    1 |
+|  0 | REAL NEGATIVE |                   15 |                  391 |
 |  1 | REAL POSITIVE |                    1 |                 6947 |
 
 
@@ -45,12 +45,12 @@ CONFUSION MATRIX WITHOUT PROTECTED ATTRIBUTES
 
 |    | /             |   PREDICTED NEGATIVE |   PREDICTED POSITIVE |
 |---:|:--------------|---------------------:|---------------------:|
-|  0 | REAL NEGATIVE |                   28 |                    9 |
+|  0 | REAL NEGATIVE |                   28 |                   17 |
 |  1 | REAL POSITIVE |                    9 |                   72 |
 
 |    | /             |   PREDICTED NEGATIVE |   PREDICTED POSITIVE |
 |---:|:--------------|---------------------:|---------------------:|
-|  0 | REAL NEGATIVE |                  223 |                   81 |
+|  0 | REAL NEGATIVE |                  223 |                  144 |
 |  1 | REAL POSITIVE |                   81 |                  691 |
 
 
@@ -60,12 +60,12 @@ CONFUSION MATRIX WITHOUT RACE
 
 |    | /             |   PREDICTED NEGATIVE |   PREDICTED POSITIVE |
 |---:|:--------------|---------------------:|---------------------:|
-|  0 | REAL NEGATIVE |                   28 |                   10 |
+|  0 | REAL NEGATIVE |                   28 |                   17 |
 |  1 | REAL POSITIVE |                   10 |                   71 |
 
 |    | /             |   PREDICTED NEGATIVE |   PREDICTED POSITIVE |
 |---:|:--------------|---------------------:|---------------------:|
-|  0 | REAL NEGATIVE |                  227 |                   83 |
+|  0 | REAL NEGATIVE |                  227 |                  140 |
 |  1 | REAL POSITIVE |                   83 |                  689 |
 
 

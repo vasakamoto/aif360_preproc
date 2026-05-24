@@ -340,7 +340,7 @@ def evaluate(df : DataFrame, s : SplitDataset) -> None:
         cm = {
                 "/" : ["REAL NEGATIVE", "REAL POSITIVE"],
                 "PREDICTED NEGATIVE" : [cm[0,0], cm[1,0]],
-                "PREDICTED POSITIVE" : [cm[1,0], cm[1,1]]
+                "PREDICTED POSITIVE" : [cm[0,1], cm[1,1]]
                 }
 
         return DataFrame(cm)
