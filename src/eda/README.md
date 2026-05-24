@@ -156,7 +156,7 @@ to have the highest Feature Importance scores.
 | 1          |           21238 |           94.78 |
 | <NA>       |               0 |            0    |
 
-![Histogram for target variable](../results/univariate/hist_pass_bar.png)
+![Histogram for target variable](../results/charts/univariate/hist_pass_bar.png)
 
 There is a huge imbalance in the dataset as can be seen in the above table, 95% of 
 samples reach the positive outcome. This distribution heavely favors a high accuracy
@@ -188,7 +188,7 @@ someone more prone to a negative outcome.
 | 77.25 - 85.0 |               8 |            0.04 |
 | nan          |              90 |            0.4  |
 
-![Histogram for age](../results/univariate/hist_age.png)
+![Histogram for age](../results/charts/univariate/hist_age.png)
 
 Also have a huge imbalance, highly right-skewed, which makes older groups more instable.
 Needs more information to conclude if might be a source of bias. Also, it would be better
@@ -210,7 +210,7 @@ Also, might be a source of bias, favoring a positive outcome for higher income f
 | 5         |            1814 |            8.1  |
 | <NA>      |             289 |            1.29 |
 
-![Histogram for family income](../results/univariate/hist_fam_inc.png)
+![Histogram for family income](../results/charts/univariate/hist_fam_inc.png)
 
 Most of individuals are situated in middle-upper family incomes, skewing data positively
 (~85% of samples are in this middle-upper group).
@@ -231,7 +231,7 @@ Might be a proxy also, individuals who are not full time have other responsabili
 | 2          |            1720 |            7.68 |
 | <NA>       |              34 |            0.15 |
 
-![Histogram for full-time](../results/univariate/hist_fulltime.png)
+![Histogram for full-time](../results/charts/univariate/hist_fulltime.png)
 
 The same behavior for other imbalanced groups.
 
@@ -250,7 +250,7 @@ The same behavior for other imbalanced groups.
 | 43.38 - 48.0  |            2394 |           10.68 |
 | nan           |               0 |            0    |
 
-![Histogram for lsat](../results/univariate/hist_fulltime.png)
+![Histogram for lsat](../results/charts/univariate/hist_fulltime.png)
 
 average = 36.76790735038158
 median = 37.0
@@ -275,7 +275,7 @@ classes (again, the same with family income).
 | 1      |           12576 |           56.13 |
 | <NA>   |               5 |            0.02 |
 
-![Histogram for gender](../results/univariate/hist_fulltime.png)
+![Histogram for gender](../results/charts/univariate/hist_fulltime.png)
 
 It have a good overall distribution, almost 50-50. But, it might have some non linear
 relationship with other features like race, family income and so on. It shall be evaluated
@@ -290,7 +290,7 @@ later.
 | 1      |           18716 |           83.53 |
 | <NA>   |               0 |            0    |
 
-![Histogram for race](../results/univariate/hist_fulltime.png)
+![Histogram for race](../results/charts/univariate/hist_fulltime.png)
 
 Strong imbalance, which might offuscate the unprivileged group. It needs further evaluation
 to check for proxies.
@@ -308,7 +308,7 @@ to check for proxies.
 | 6      |            2054 |            9.17 |
 | <NA>   |              96 |            0.43 |
 
-![Histogram for tier](../results/univariate/hist_fulltime.png)
+![Histogram for tier](../results/charts/univariate/hist_fulltime.png)
 
 Even though it has a good distribution (most samples are in near median), it might be
 a proxy for other variables. Needs further evaluation.
@@ -328,7 +328,7 @@ a proxy for other variables. Needs further evaluation.
 | 3.6 - 3.9 |            3369 |           15.04 |
 | nan       |               0 |            0    |
 
-![Histogram for undergraduate gpa](../results/univariate/hist_fulltime.png)
+![Histogram for undergraduate gpa](../results/charts/univariate/hist_fulltime.png)
 
 average = 3.2154505288525908
 median = 3.2
@@ -355,7 +355,7 @@ central tendency, but it isn't symmetrical.
 | 2.42 - 3.25   |              74 |            0.33 |
 | nan           |             984 |            4.39 |
 
-![Histogram for z-score for first year gpa](../results/univariate/hist_fulltime.png)
+![Histogram for z-score for first year gpa](../results/charts/univariate/hist_fulltime.png)
 
 average = 0.08606777762218178
 median = 0.08
@@ -383,7 +383,7 @@ with a "good" variance, making a viable option to use as a predictive feature.
 | 2.21 - 3.45   |             217 |            0.97 |
 | nan           |            1289 |            5.75 |
 
-![Histogram for final gpa](../results/univariate/hist_fulltime.png)
+![Histogram for final gpa](../results/charts/univariate/hist_fulltime.png)
 
 average = 0.008756037503551474
 median = 0.0
