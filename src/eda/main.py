@@ -10,7 +10,7 @@ from src.eda.multivariate import multivariate_analysis
 
 
 def execute(df : DataFrame) -> None:
-    inspection_analysis(DATASET)               ## needs some attention return an object or something I don't know
+    inspection_analysis(DATASET)
     univariate_analysis(df)
     bivariate_analysis(df)
     multivariate_analysis(df)

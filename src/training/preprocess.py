@@ -51,9 +51,9 @@ def _disparate_impact_remover(ds : SplitDataset, **kwargs) -> ProcessedDataset:
     ds_copy_validation = ds.validation.copy(deepcopy=True)
 
     preprocess = DisparateImpactRemover(
-        repair_level=kwargs.get("repair_level", 1.0),
-        sensitive_attribute=PROTECTED_ATTRIBUTES[0],
-    )
+            repair_level=kwargs.get("repair_level", 1.0),
+            sensitive_attribute=PROTECTED_ATTRIBUTES[0],
+            )
     preprocess.fit(ds_copy_train)
     transformed_train = preprocess.fit_transform(ds_copy_train)
     transformed_test = preprocess.fit_transform(ds_copy_test)
@@ -74,14 +74,14 @@ def _learning_fair_representations(ds : SplitDataset, **kwargs) -> ProcessedData
     ds_copy_validation = ds.validation.copy(deepcopy=True)
     preprocess = LFR(
             unprivileged_groups=[{"race" : list([g["race"] for g in UNPRIVILEGED_GROUP])}],
-        privileged_groups=[{"race" : list([g["race"] for g in PRIVILEGED_GROUP])}],
-        k=kwargs.get("k", 15),
-        Ax=kwargs.get("Ax", 0.5),
-        Ay=kwargs.get("Ay", 10.0),
-        Az=kwargs.get("Az", 0.01),
-        verbose=kwargs.get("verbose", False),
-        seed=kwargs.get("seed", 4),
-    )
+            privileged_groups=[{"race" : list([g["race"] for g in PRIVILEGED_GROUP])}],
+            k=kwargs.get("k", 17),
+            Ax=kwargs.get("Ax", 0.01),
+            Ay=kwargs.get("Ay", 100),
+            Az=kwargs.get("Az", 100),
+            verbose=kwargs.get("verbose", False),
+            seed=kwargs.get("seed", 4),
+            )
     preprocess.fit(ds_copy_train)
     transformed_train = preprocess.transform(ds_copy_train)
     transformed_test = preprocess.transform(ds_copy_test)

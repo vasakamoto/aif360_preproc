@@ -3,9 +3,9 @@ from dataclasses import fields
 
 from src.configs import (
         PATH_ROOT,
-        TARGET,
         PROTECTED_ATTRIBUTES,
         PRIVILEGED_GROUP,
+        SELECTED_QUANT,
         UNPRIVILEGED_GROUP,
         GroupedProcessedDatasets,
         SplitDataset
@@ -55,9 +55,11 @@ def _spddi(grouped_ds : GroupedProcessedDatasets, split_ds : SplitDataset) -> Da
     d["delta_di"] = d["after_di"] - d["before_di"]
     d["delta_spd"] = d["after_spd"] - d["before_spd"]
 
-    with open(PATH_ROOT/"results"/"tables"/"evaluation"/"processing_metrics", "w") as file:
-        file.write("STATISTICAL PARITY DIFFERENCE AND DISPARATE IMPACT\n\n")
+    with open(PATH_ROOT/"results"/"tables"/"evaluation.md", "a") as file:
+        file.write("\n\nPROCESSING METRICS\n\nSTATISTICAL PARITY DIFFERENCE AND DISPARATE IMPACT\n\n")
         d.to_markdown(file)
+        file.write("\n\n\n")
+        file.write("_"*100)
 
     return d
 
@@ -71,7 +73,7 @@ def _w_distance(grouped_ds : GroupedProcessedDatasets, split_ds : SplitDataset) 
             "wasserstein_distance_after" : [], 
             "wasserstein_distance_delta" : [], 
             }
-    quant = ["lsat", "ugpa", "zfygpa", "zgpa", "age"]
+    quant = SELECTED_QUANT
     df_before = split_ds.train.convert_to_dataframe()[0]
 
     for var in quant:
@@ -106,11 +108,11 @@ def _w_distance(grouped_ds : GroupedProcessedDatasets, split_ds : SplitDataset) 
             d["wasserstein_distance_delta"].append(w_distance_after - w_distance_before)
 
     d = DataFrame(d)
-    with open(PATH_ROOT/"results"/"tables"/"evaluation"/"processing_metrics", "a") as file:
-        file.write("\n\n")
-        file.write("_"*100)
+    with open(PATH_ROOT/"results"/"tables"/"evaluation.md", "a") as file:
         file.write("\n\nWASSERSTEIN DISTANCE\n\n")
         d.to_markdown(file)
+        file.write("\n\n\n")
+        file.write("_"*100)
 
     return d
 
@@ -128,14 +130,12 @@ def _mutual_information(grouped_ds : GroupedProcessedDatasets, split_ds : SplitD
             "mi_delta": []
             }
 
-    quant = ["lsat", "ugpa", "zfygpa", "zgpa", "age"]
+    quant = SELECTED_QUANT
 
     df_before = split_ds.train.convert_to_dataframe()[0]
     X_before = df_before[quant]
     y_before = df_before[split_ds.train.label_names[0]]
 
-    # Informação Mútua original para cada variável
-    # random_state garante a reprodutibilidade do algoritmo de vizinhos mais próximos do sklearn
     mi_before_values = mutual_info_classif(X_before, y_before, random_state=42)
     mi_before_dict = dict(zip(quant, mi_before_values))
 
@@ -147,7 +147,6 @@ def _mutual_information(grouped_ds : GroupedProcessedDatasets, split_ds : SplitD
         X_after = df_after[quant]
         y_after = df_after[split_ds.train.label_names[0]]
 
-        # Informação Mútua após o pré-processamento
         mi_after_values = mutual_info_classif(X_after, y_after, random_state=42)
         mi_after_dict = dict(zip(quant, mi_after_values))
 
@@ -162,11 +161,11 @@ def _mutual_information(grouped_ds : GroupedProcessedDatasets, split_ds : SplitD
             d["mi_delta"].append(round(mi_a - mi_b, 5))
 
     df_mi = DataFrame(d)
-    with open(PATH_ROOT/"results"/"tables"/"evaluation"/"processing_metrics", "a") as file:
-        file.write("\n\n")
-        file.write("_"*100)
+    with open(PATH_ROOT/"results"/"tables"/"evaluation.md", "a") as file:
         file.write("\n\nATTRIBUTE-TARGET MUTUAL INFORMATION\n\n")
         df_mi.to_markdown(file)
+        file.write("\n\n\n")
+        file.write("_"*100)
 
     return df_mi
 
@@ -216,11 +215,11 @@ def _intersectional_spd(grouped_ds : GroupedProcessedDatasets, split_ds : SplitD
         df_res = merge(df_res, rates_after, on=quali, how='left')
         df_res[col_name] = df_res[col_name].round(3)
 
-    with open(PATH_ROOT/"results"/"tables"/"evaluation"/"processing_metrics", "a") as file:
-        file.write("\n\n")
-        file.write("_"*100)
+    with open(PATH_ROOT/"results"/"tables"/"evaluation.md", "a") as file:
         file.write("\n\nINTERSECTIONAL SUBGROUPS DETAILED RATES\n\n")
         df_res.to_markdown(file)
+        file.write("\n\n\n")
+        file.write("_"*100)
 
     return df_res
 

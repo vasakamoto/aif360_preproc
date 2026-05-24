@@ -1,4 +1,5 @@
 
+from src.configs import PATH_ROOT
 
 from pandas import DataFrame, Series
 
@@ -8,9 +9,12 @@ from pandas import DataFrame, Series
 
 
 def inspection_analysis(df : DataFrame) -> None:
-    for c in df.columns.sort_values():
-        print(f"COLUMN : {c}")
-        print(f"TYPE : {df[c].dtype}")
-        print(f"NULL PERCENTAGE : {round(df[c].isna().sum() / df[c].shape[0], 4)*100}")
-        print(df[c].value_counts())
-        print("_"*40)
+    with open(PATH_ROOT/"results"/"tables"/"inspection.md", "w") as file:
+        for c in df.columns.sort_values():
+            file.write(f"\n\nCOLUMN : {c}")
+            file.write(f"\n\nTYPE : {df[c].dtype}")
+            file.write(f"\n\nNULL PERCENTAGE : {round(df[c].isna().sum() / df[c].shape[0], 4)*100}")
+            file.write("\n\n")
+            df[c].value_counts().to_markdown(file, mode="a")
+            file.write("\n\n")
+            file.write("_"*40)

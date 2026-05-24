@@ -28,7 +28,7 @@ def src_dataset(df : DataFrame) -> SplitDataset:
     )
     df = concat([df_major_downsampled, df_minor])
     df_train, df_test = train_test_split(df, test_size=0.4, random_state=42)
-    df_valid, df_test = train_test_split(df_test, test_size=0.5, random_state=42)
+    df_valid, df_test = train_test_split(df_test, test_size=0.9, random_state=42)
 
     return SplitDataset(
             train=BinaryLabelDataset(

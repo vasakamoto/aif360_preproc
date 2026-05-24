@@ -397,4 +397,7 @@ protected group (such as race or fam_inc) faced systematic difficulties during t
 course, zgpa will be the variable that best "hides" (or encodes) those difficulties.
 
 # BIVARIATE ANALYSIS
+
+
+
 # MULTIVARIATE ANALYSIS

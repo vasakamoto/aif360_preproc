@@ -101,7 +101,7 @@ def _spddicsp(df: DataFrame, quali: list[str], quanti: list[str], target: str) -
                 d["conditional_statistical_parity"].append(csp)
 
     d = DataFrame(d)
-    with open(PATH_ROOT/"results"/"tables"/"multivariate"/f"tests_spddicsp", "w") as file:
+    with open(PATH_ROOT/"results"/"tables"/"multivariate.md", "w") as file:
         file.write("SPD, DI AND CONDITIONAL STATISTICAL PARITY\n\n")
         d.to_markdown(file)
         file.write("\n\n\n")
@@ -143,7 +143,7 @@ def _vif(df : DataFrame, target_feat : str) -> Series:
     )
     vif_series.drop('intercept', inplace=True)
 
-    with open(PATH_ROOT/"results"/"tables"/"multivariate"/f"tests_vif", "w") as file:
+    with open(PATH_ROOT/"results"/"tables"/"multivariate.md", "a") as file:
         file.write("VARIANCE INFLATION FACTOR\n\n")
         vif_series.to_markdown(file)
         file.write("\n\n\n")
@@ -177,7 +177,7 @@ def _spearman_matrix(df : DataFrame) -> DataFrame:
     plt.savefig(PATH_ROOT/"results"/"charts"/"multivariate"/"corr_matrix")
     plt.close()
 
-    with open(PATH_ROOT/"results"/"tables"/"multivariate"/f"tests_spearman_corr_matrix", "w") as file:
+    with open(PATH_ROOT/"results"/"tables"/"multivariate.md", "a") as file:
         file.write("SPEARMAN MATRIX\n\n")
         corr.to_markdown(file)
         file.write("\n\n\n")
@@ -300,17 +300,12 @@ def _pca(df : DataFrame, target_feat : str) -> tuple:
     plt.savefig(PATH_ROOT/"results"/"charts"/"multivariate"/"pca")
     plt.close()
 
-
-
-
-
     loadings = DataFrame(
             pca.components_[0], 
             index=X.columns, 
             columns=['PC1_Weight']
             ).sort_values(by='PC1_Weight', ascending=False)
 
-    print(loadings) 
     pca_results = pca.transform(X_scaled)
 
     df_pca_plot = DataFrame(
@@ -336,7 +331,10 @@ def _pca(df : DataFrame, target_feat : str) -> tuple:
     plt.savefig(PATH_ROOT/"results"/"charts"/"multivariate"/"pca_scatter")
     plt.close()
 
-
+    with open(PATH_ROOT/"results"/"tables"/"multivariate.md", "a") as file:
+        file.write("PRINCIPAL COMPONENT ANALYSIS\n\n")
+        loadings.to_markdown(file)
+        file.write("\n\n\n")
 
     return pca, exp_var_cum
 

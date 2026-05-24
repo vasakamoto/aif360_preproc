@@ -39,9 +39,11 @@ def _contingency_table(df : DataFrame) -> DataFrame:
                                      ) * 100
 
     frequency.sort_index(inplace=True)
-    with open(PATH_ROOT/"results"/"tables"/"bivariate"/f"{"_".join(columns)}", "w") as file:
+    with open(PATH_ROOT/"results"/"tables"/"bivariate.md", "a") as file:
+        file.write(f"\n\nCONTINGENCY TABLE - {" X ".join(columns)}\n\n")
         frequency.to_markdown(file)
-        file.write("\n\n       \n\n")
+        file.write("\n\n\n")
+        file.write("_"*100)
 
     return frequency
 
@@ -73,12 +75,15 @@ def _chi_square_test(df : DataFrame, var1 : str, var2 : str) -> dict:
     for c in columns:
         matrix[f"delta_{c}"] = matrix[c] - matrix[f"expected_{c}"]
 
-    with open(PATH_ROOT/"results"/"tables"/"bivariate"/f"chi2_{var1}_{var2}", "a") as file:
+    with open(PATH_ROOT/"results"/"tables"/"bivariate.md", "a") as file:
+        file.write(f"\n\nCHI SQUARED TEST - {var1} X {var2}\n\n")
         matrix.to_markdown(file)
         file.write("\n\n\n")
         file.write(f"\nChi squared: {chit[0]:.4f}\n")
         file.write(f"\nP-value: {chit[1]:.4f}\n")
         file.write(f"\nDegrees of Freedom: {chit[2]}\n")
+        file.write("\n\n\n")
+        file.write("_"*100)
 
     return {
             "matrix" : matrix,
@@ -117,9 +122,11 @@ def _coefficient_v(df : DataFrame, categ_feats : list) -> DataFrame:
             d[l].append(v)
 
     d = DataFrame(d, index=d["label"]).drop(columns=["label"])
-    with open(PATH_ROOT/"results"/"tables"/"bivariate"/f"tests_cramer", "w") as file:
-        file.write("CRAMER TEST - COEFFICIENT V\n\n")
+    with open(PATH_ROOT/"results"/"tables"/"bivariate.md", "a") as file:
+        file.write("\n\nCRAMER TEST - COEFFICIENT V\n\n")
         d.to_markdown(file)
+        file.write("\n\n\n")
+        file.write("_"*100)
 
     return d
 #               race  fulltime   fam_inc      male      tier  pass_bar
@@ -196,10 +203,11 @@ def _student_mannwhitneyu_test(df : DataFrame, quant : str, quali : str) -> Data
 
     d = DataFrame(d)
 
-    with open(PATH_ROOT/"results"/"tables"/"bivariate"/f"student_mannwhitneyu_test_{quant}_{quali}", "w") as file:
-        file.write("STUDENT'S T AND MANN-WHITNEY U TEST\n\n")
+    with open(PATH_ROOT/"results"/"tables"/"bivariate.md", "a") as file:
+        file.write(f"\n\nSTUDENT'S T AND MANN-WHITNEY U TEST - {quant} X {quali}\n\n")
         d.to_markdown(file)
         file.write("\n\n\n")
+        file.write("_"*100)
 
     return d.loc[(d["t_test_p_value"] < 0.05) & (d["mann_whitney_p_value"] < 0.05)].sort_values("group_a")
 
@@ -234,10 +242,11 @@ def _kruskal_wallis(df : DataFrame, quali : list[str], quanti : list[str]) -> Da
             d[f"s_{c}"].append(stat)
 
     d = DataFrame(d).set_index("label")
-    with open(PATH_ROOT/"results"/"tables"/"bivariate"/f"tests_kruskal_wallis", "w") as file:
-        file.write("KRUSKAL WALLIS TEST\n\n")
+    with open(PATH_ROOT/"results"/"tables"/"bivariate.md", "a") as file:
+        file.write("\n\nKRUSKAL WALLIS TEST\n\n")
         d.to_markdown(file)
         file.write("\n\n\n")
+        file.write("_"*100)
 
     return DataFrame(d)
 
@@ -260,9 +269,11 @@ def _corr_matrix_heatmap(df : DataFrame, quanti : list[str]) -> DataFrame:
 
     corr = df[quanti].corr(method="pearson")
 
-    with open(PATH_ROOT/"results"/"tables"/"bivariate"/f"corr_matrix", "w") as file:
-        file.write("PEARSON MATRIX\n\n")
+    with open(PATH_ROOT/"results"/"tables"/"bivariate.md", "a") as file:
+        file.write("\n\nPEARSON MATRIX\n\n")
         corr.to_markdown(file)
+        file.write("\n\n\n")
+        file.write("_"*100)
 
     sns.heatmap(corr, annot=True, cmap='RdBu_r', center=0, fmt='.2f')
     plt.title(f"Pearson Matrix")
@@ -306,10 +317,11 @@ def _spddi(df : DataFrame, quali : list[str], target : str) -> DataFrame:
             d["statistical_parity_difference"].append(spd)
 
     d = DataFrame(d)
-    with open(PATH_ROOT/"results"/"tables"/"bivariate"/f"tests_spddi", "w") as file:
-        file.write("STATISTICAL PARITY DIFFERENCE AND DISPARATE IMPACT\n\n")
+    with open(PATH_ROOT/"results"/"tables"/"bivariate.md", "a") as file:
+        file.write("\n\nSTATISTICAL PARITY DIFFERENCE AND DISPARATE IMPACT\n\n")
         d.to_markdown(file)
         file.write("\n\n\n")
+        file.write("_"*100)
 
     return d
 
@@ -330,10 +342,11 @@ def _point_biserial(df : DataFrame, quant : list[str], target : str) -> DataFram
         d["correlation"].append(corr)
 
     d = DataFrame(d).set_index("label")
-    with open(PATH_ROOT/"results"/"tables"/"bivariate"/f"tests_point_biserial", "w") as file:
-        file.write("POINT BISERIAL TEST\n\n")
+    with open(PATH_ROOT/"results"/"tables"/"bivariate.md", "a") as file:
+        file.write("\n\nPOINT BISERIAL TEST\n\n")
         d.to_markdown(file)
         file.write("\n\n\n")
+        file.write("_"*100)
 
     return d
 
@@ -342,6 +355,8 @@ def bivariate_analysis(df : DataFrame) -> None:
 
     quali = ["race", "fulltime", "fam_inc", "male", "pass_bar", "tier"]
     quant = ["lsat", "ugpa", "zfygpa", "zgpa", "age"]
+
+    (PATH_ROOT/"results"/"tables"/"bivariate.md").unlink(missing_ok=True)
 
     _corr_matrix_heatmap(df, quant)    
     _coefficient_v(df, quali)

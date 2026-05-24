@@ -4,6 +4,7 @@ from dataclasses import fields
 from aif360.datasets import BinaryLabelDataset
 from numpy import mean
 from pandas import DataFrame
+from pandas._libs.hashtable import mode
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import (
         accuracy_score,
@@ -22,14 +23,23 @@ from src.configs import (
         )
 
 
-def _std(model : RandomForestClassifier, ds_training : BinaryLabelDataset,
-         ds_validation : BinaryLabelDataset, ds_test : BinaryLabelDataset) -> dict:
+def _std(model : RandomForestClassifier, ds_validation : BinaryLabelDataset,
+         ds_test : BinaryLabelDataset) -> dict:
 
-    X_training = ds_training.features
+    def cm_to_df(cm) -> DataFrame:
+        # [TN, FP]
+        # [FN, TP]
+        cm = {
+                "/" : ["REAL NEGATIVE", "REAL POSITIVE"],
+                "PREDICTED NEGATIVE" : [cm[0,0], cm[1,0]],
+                "PREDICTED POSITIVE" : [cm[0,1], cm[1,1]]
+                }
+
+        return DataFrame(cm)
+
     X_test = ds_test.features
     X_validation = ds_validation.features
 
-    y_training = ds_training.labels.ravel()
     y_test = ds_test.labels.ravel()
     y_validation = ds_validation.labels.ravel()
 
@@ -46,14 +56,14 @@ def _std(model : RandomForestClassifier, ds_training : BinaryLabelDataset,
             "test_recall" : round(recall_score(y_test, y_pred_test, pos_label=1), 3),
             "test_f1" : round(f1_score(y_test, y_pred_test, pos_label=1), 3),
             "test_roc_auc" : round(roc_auc_score(y_test, y_prob_test), 3),
-            "test_confusion_matrix" : confusion_matrix(y_test, y_pred_test),
+            "test_confusion_matrix" : cm_to_df(confusion_matrix(y_test, y_pred_test)),
             "validation_baseline_accuracy" : round(max(mean(y_validation == 1), mean(y_validation == 0)), 3),
             "validation_accuracy" : round(accuracy_score(y_validation, y_pred_validation), 3),
             "validation_precision" : round(precision_score(y_validation, y_pred_validation, pos_label=1), 3),
             "validation_recall" : round(recall_score(y_validation, y_pred_validation, pos_label=1), 3),
             "validation_f1" : round(f1_score(y_validation, y_pred_validation, pos_label=1), 3),
             "validation_roc_auc" : round(roc_auc_score(y_validation, y_prob_validation), 3),
-            "validation_confusion_matrix" : confusion_matrix(y_validation, y_pred_validation),
+            "validation_confusion_matrix" : cm_to_df(confusion_matrix(y_validation, y_pred_validation)),
             }
 
 
@@ -61,58 +71,58 @@ def std_metrics(models : TrainedModels, grouped_ds : GroupedProcessedDatasets,
             split_ds : SplitDataset) -> DataFrame:
 
     d = {
-            "dataset" : [],
-            "test_baseline_accuracy" : [],
-            "test_accuracy" : [],
-            "test_precision" : [],
-            "test_recall" : [],
-            "test_f1" : [],
-            "test_roc_auc" : [],
-            #"test_confusion_matrix" : [],
-            "validation_baseline_accuracy" : [],
-            "validation_accuracy" : [],
-            "validation_precision" : [],
-            "validation_recall" : [],
-            "validation_f1" : [],
-            "validation_roc_auc" : [],
-            #"validation_confusion_matrix" : [],
+            "metrics" : [],
+            "raw" : [],
+            "reweighing" : [],
+            "disparate_impact_remover" : [],
+            "learning_fair_representations" : [],
             }
 
+    c = {
+            "dataset" : [],
+            "validation_confusion_matrix" : [],
+            "test_confusion_matrix" : []
+            }
+
+    d["metrics"].extend([
+        k for k in _std(models.raw, split_ds.test, split_ds.validation).keys()
+        if k not in ["validation_confusion_matrix", "test_confusion_matrix"]
+        ])
+
     for model in fields(models):
-        d["dataset"].append(model.name)
+
+        if model.name not in d.keys(): continue
+
         ds_test = split_ds.test
         ds_validation = split_ds.validation
 
-        if model.name == "raw":
-            ds_training = split_ds.train
-        elif model.name == "disparate_impact_remover" or model.name == "learning_fair_representations":
-            ds_training = getattr(grouped_ds, model.name).transformed_train 
-        elif model.name == "reweighing": 
-            ds_training = grouped_ds.reweighing.transformed_train
-        else:
-            raise Exception("UNEXPECTED MODEL")
+        res = _std(getattr(models, model.name), ds_validation, ds_test)
+        
+        d[model.name].extend([
+            res[k] for k in res.keys() 
+            if k not in ["validation_confusion_matrix", "test_confusion_matrix"]
+            ])
 
-        res = _std(getattr(models, model.name), ds_training, ds_validation, ds_test)
-
-        d["test_baseline_accuracy"].append(res["test_baseline_accuracy"])
-        d["test_accuracy"].append(res["test_accuracy"])
-        d["test_precision"].append(res["test_precision"])
-        d["test_recall"].append(res["test_recall"])
-        d["test_f1"].append(res["test_f1"])
-        d["test_roc_auc"].append(res["test_roc_auc"])
-        #d["test_confusion_matrix"].append(res["test_confusion_matrix"])
-        d["validation_baseline_accuracy"].append(res["validation_baseline_accuracy"])
-        d["validation_accuracy"].append(res["validation_accuracy"])
-        d["validation_precision"].append(res["validation_precision"])
-        d["validation_recall"].append(res["validation_recall"])
-        d["validation_f1"].append(res["validation_f1"])
-        d["validation_roc_auc"].append(res["validation_roc_auc"])
-        #d["validation_confusion_matrix"].append(res["validation_confusion_matrix"])
+        c["dataset"].append(model.name)
+        c["validation_confusion_matrix"].append(res["validation_confusion_matrix"])
+        c["test_confusion_matrix"].append(res["test_confusion_matrix"])
 
     d = DataFrame(d)
 
-    with open(PATH_ROOT/"results"/"tables"/"evaluation"/"standard_metrics", "w") as file:
-        file.write("STANDARD METRICS\n\n")
+    with open(PATH_ROOT/"results"/"tables"/"evaluation.md", "a") as file:
+        file.write("\n\nSTANDARD METRICS\n\n")
         d.to_markdown(file)
+        file.write("\n\n\n")
+        file.write("_"*100)
+
+        for i in range(len(c["dataset"])):
+            file.write(f"\n\nVALIDATION CONFUSION MATRIX {c["dataset"][i].upper()}\n\n")
+            c["validation_confusion_matrix"][i].to_markdown(file)
+            file.write("\n\n\n")
+            file.write("_"*100)
+            file.write(f"\n\nTEST CONFUSION MATRIX {c["dataset"][i].upper()}\n\n")
+            c["test_confusion_matrix"][i].to_markdown(file)
+            file.write("\n\n\n")
+            file.write("_"*100)
 
     return d

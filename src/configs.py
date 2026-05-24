@@ -29,6 +29,10 @@ FAVORABLE_OUTCOME = 1
 
 DATASET = read_csv(PATH_ROOT / "dataset/bar_pass_prediction.csv")
 
+SELECTED_COLUMNS = ["zgpa", "lsat", "race", "tier", "fam_inc", "pass_bar"]
+SELECTED_QUANT = ["zgpa", "lsat"]
+SELECTED_QUALI = ["race", "tier", "fam_inc"]
+
 # YEAH, IT WOULD BE GREAT TO SEPARATE MODELS FROM OTHER KEY CONFIGS, BUT... I THOUGHT
 # IT WOULD BE CONFUSING
 @dataclass

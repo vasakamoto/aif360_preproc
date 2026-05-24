@@ -50,27 +50,27 @@ def _histogram(s : Series) -> None:
     plt.close()
 
 
-def _tabulate_df(df : DataFrame) -> None:
-
-    path = PATH_ROOT/"results"/"tables"/"univariate"/f"{df.index.name}"
-    df.to_markdown(path)
-
 def univariate_analysis(df : DataFrame) -> None:
 
-    for c in df.columns:
-        measures = {
-        "average" : df[c].mean(),
-        "median" : df[c].median(),
-        "mode" : df[c].mode(),
-        "variance" : df[c].var(),
-        "amplitude" : df[c].max() - df[c].min()
-        }
-        s = _distribution(df[c]).sort_index()
-        _tabulate_df(s)
-        _histogram(s["abs_frequency"])
+    (PATH_ROOT/"results"/"tables"/"univariate.md").unlink(missing_ok=True)
 
-        with open(PATH_ROOT/"results"/"tables"/"univariate"/f"{c}", "a") as file:
+    for c in df.columns:
+        with open(PATH_ROOT/"results"/"tables"/"univariate.md", "a") as file:
+            measures = {
+            "average" : df[c].mean(),
+            "median" : df[c].median(),
+            "mode" : df[c].mode(),
+            "variance" : df[c].var(),
+            "amplitude" : df[c].max() - df[c].min()
+            }
+            s = _distribution(df[c]).sort_index()
+            _histogram(s["abs_frequency"])
+            file.write(f"\n\n{c}\n\n")
+            s.to_markdown(file)
+            file.write("\n")
             for k, v in measures.items():
-                file.write(f"\n\n{k} = {v}")
+                file.write(f"\n{k} = {v}")
+            file.write("\n\n")
+            file.write("_"*100)
         
     return
