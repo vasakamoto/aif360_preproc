@@ -5,23 +5,23 @@ TRUE RAW METRICS
 |    | metrics                       |   true_raw |   without_protection |   without_race |
 |---:|:------------------------------|-----------:|---------------------:|---------------:|
 |  0 | test_baseline_accuracy        |      0.945 |                0.678 |          0.678 |
-|  1 | test_accuracy                 |      0.947 |                0.802 |          0.804 |
-|  2 | test_precision                |      0.947 |                0.828 |          0.831 |
-|  3 | test_recall                   |      1     |                0.895 |          0.892 |
-|  4 | test_f1                       |      0.973 |                0.86  |          0.861 |
-|  5 | test_roc_auc                  |      0.873 |                0.866 |          0.872 |
+|  1 | test_accuracy                 |      0.947 |                0.801 |          0.809 |
+|  2 | test_precision                |      0.947 |                0.826 |          0.836 |
+|  3 | test_recall                   |      1     |                0.894 |          0.894 |
+|  4 | test_f1                       |      0.973 |                0.859 |          0.864 |
+|  5 | test_roc_auc                  |      0.873 |                0.874 |          0.878 |
 |  6 | validation_baseline_accuracy  |      0.955 |                0.643 |          0.643 |
-|  7 | validation_accuracy           |      0.958 |                0.794 |          0.786 |
-|  8 | validation_precision          |      0.958 |                0.809 |          0.807 |
-|  9 | validation_recall             |      1     |                0.889 |          0.877 |
-| 10 | validation_f1                 |      0.979 |                0.847 |          0.84  |
-| 11 | validation_roc_auc            |      0.87  |                0.897 |          0.897 |
-| 12 | statistical_parity_difference |     -0.023 |               -0.677 |         -0.652 |
-| 13 | disparate_impact              |      0.977 |                0.194 |          0.213 |
-| 14 | equal_opportunity_difference  |     -0.002 |               -0.547 |         -0.514 |
-| 15 | average_odds_difference       |     -0.046 |               -0.509 |         -0.477 |
-| 16 | false_positive_rate_diff      |     -0.09  |               -0.472 |         -0.44  |
-| 17 | false_discovery_rate_diff     |      0.16  |                0.214 |          0.228 |
+|  7 | validation_accuracy           |      0.958 |                0.802 |          0.81  |
+|  8 | validation_precision          |      0.958 |                0.811 |          0.82  |
+|  9 | validation_recall             |      1     |                0.901 |          0.901 |
+| 10 | validation_f1                 |      0.979 |                0.854 |          0.859 |
+| 11 | validation_roc_auc            |      0.87  |                0.89  |          0.897 |
+| 12 | statistical_parity_difference |     -0.023 |               -0.652 |         -0.646 |
+| 13 | disparate_impact              |      0.977 |                0.226 |          0.221 |
+| 14 | equal_opportunity_difference  |     -0.002 |               -0.494 |         -0.464 |
+| 15 | average_odds_difference       |     -0.046 |               -0.478 |         -0.454 |
+| 16 | false_positive_rate_diff      |     -0.09  |               -0.462 |         -0.444 |
+| 17 | false_discovery_rate_diff     |      0.161 |                0.232 |          0.181 |
 
 
 ____________________________________________________________________________________________________
@@ -46,12 +46,12 @@ CONFUSION MATRIX WITHOUT PROTECTED ATTRIBUTES
 |    | /             |   PREDICTED NEGATIVE |   PREDICTED POSITIVE |
 |---:|:--------------|---------------------:|---------------------:|
 |  0 | REAL NEGATIVE |                   28 |                   17 |
-|  1 | REAL POSITIVE |                    9 |                   72 |
+|  1 | REAL POSITIVE |                    8 |                   73 |
 
 |    | /             |   PREDICTED NEGATIVE |   PREDICTED POSITIVE |
 |---:|:--------------|---------------------:|---------------------:|
-|  0 | REAL NEGATIVE |                  223 |                  144 |
-|  1 | REAL POSITIVE |                   81 |                  691 |
+|  0 | REAL NEGATIVE |                  222 |                  145 |
+|  1 | REAL POSITIVE |                   82 |                  690 |
 
 
 ____________________________________________________________________________________________________
@@ -60,13 +60,13 @@ CONFUSION MATRIX WITHOUT RACE
 
 |    | /             |   PREDICTED NEGATIVE |   PREDICTED POSITIVE |
 |---:|:--------------|---------------------:|---------------------:|
-|  0 | REAL NEGATIVE |                   28 |                   17 |
-|  1 | REAL POSITIVE |                   10 |                   71 |
+|  0 | REAL NEGATIVE |                   29 |                   16 |
+|  1 | REAL POSITIVE |                    8 |                   73 |
 
 |    | /             |   PREDICTED NEGATIVE |   PREDICTED POSITIVE |
 |---:|:--------------|---------------------:|---------------------:|
-|  0 | REAL NEGATIVE |                  227 |                  140 |
-|  1 | REAL POSITIVE |                   83 |                  689 |
+|  0 | REAL NEGATIVE |                  232 |                  135 |
+|  1 | REAL POSITIVE |                   82 |                  690 |
 
 
 ____________________________________________________________________________________________________
@@ -108,8 +108,9 @@ CONFUSION MATRIX WITHOUT PROTECTED ATTRIBUTES
 
 |    | features   |   feature_importance |
 |---:|:-----------|---------------------:|
-|  0 | zgpa       |             0.622039 |
-|  1 | lsat       |             0.377961 |
+|  0 | ugpa       |             0.11719  |
+|  1 | zgpa       |             0.569215 |
+|  2 | lsat       |             0.313595 |
 
 
 ____________________________________________________________________________________________________
@@ -118,10 +119,11 @@ CONFUSION MATRIX WITHOUT RACE
 
 |    | features   |   feature_importance |
 |---:|:-----------|---------------------:|
-|  0 | zgpa       |            0.609783  |
-|  1 | lsat       |            0.299542  |
-|  2 | tier       |            0.0662358 |
-|  3 | fam_inc    |            0.0244396 |
+|  0 | ugpa       |            0.0792177 |
+|  1 | zgpa       |            0.543309  |
+|  2 | lsat       |            0.297854  |
+|  3 | tier       |            0.0591965 |
+|  4 | fam_inc    |            0.0204226 |
 
 
 ____________________________________________________________________________________________________

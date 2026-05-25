@@ -3,22 +3,18 @@ from src.configs import (
         PRIVILEGED_GROUP,
         UNPRIVILEGED_GROUP,
         PROTECTED_ATTRIBUTES,
-        TARGET,
-        FAVORABLE_OUTCOME,
         GroupedProcessedDatasets,
         ProcessedDataset,
         SplitDataset
         )
 
-from aif360.datasets import BinaryLabelDataset
 from aif360.algorithms.preprocessing.optim_preproc_helpers.opt_tools import OptTools
 from aif360.algorithms.preprocessing import (
-    DisparateImpactRemover,
-    LFR,
-    OptimPreproc,
-    Reweighing,
-)
-from pandas import cut
+        DisparateImpactRemover,
+        LFR,
+        OptimPreproc,
+        Reweighing,
+        )
 
 
 def _reweighing(ds : SplitDataset) -> ProcessedDataset:

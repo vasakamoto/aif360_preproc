@@ -261,25 +261,60 @@ com a ferramenta AI Fairness 360 não há coleta de dados.
 
 ### 3.1. Preparação de dados
 
-*(Seção a ser desenvolvida)*
+Antes de iniciar a preparação dos dados, foi realizado a análise exploratória de dados
+para caracterizar o dataset e suas features. 
+
+Feita a análise exploratória de dados, identificou-se um forte desbalanceamento entre
+as variáveis alvos havendo apenas 5% de amostras reprovadas no exame, também, havendo
+um desbalanceamento entre as variáveis como etnia, possuindo cerca 83% de amostras da
+etnia favorecida. O desbalanceamento entre as categorias da variável alvo foi tratado
+realizando *downsampling*, reduzindo a proporção entre a resposta favorável e desfavorável
+de 19:1 para 2:1. O desbalanceamento entre etnias não foi tratado para preservar o 
+comportamento do conjunto de dados.
+
+A partir da análise descartou-se diversas *features* redundantes, selecionando features
+que possuem viés associado e as que possuem poder preditivo. 
+
+Após a seleção os dados, o conjunto foi separado em dois, um para teste e outro para 
+treinamento. O conjunto de teste não foi processado, sendo apenas utilizado o conjunto
+de treinamento para realizar o pré-processamento utilizando os métodos contidos na 
+biblioteca *AI Fairness 360*, *Reweighing*, *Disparate Impact* e *Learning Fair 
+Representations*, assim, gerando 4 conjuntos de dados, os três transformados a partir
+do mesmo conjunto de dados de treinamento.
+
 
 ### 3.2. Seleção do modelo
 
-*(Seção a ser desenvolvida)*
+O modelo selecionado para treinamento foi *Random Forests* por construir múltiplas 
+árvores de decisão baseadas em amostragens aleatórias com reposição (bagging) e 
+subconjuntos aleatórios de características, lida melhor com a variabilidade e com 
+distribuições desbalanceadas, permitindo uma análise mais discriminativa do comportamento
+das classes minoritárias após a aplicação de pesos. Também, por ser um modelo que robusto
+sendo eficaz para identificar relações não-lineares e **proxies**, sendo capaz de reconstituir
+vies a partir de outras variáveis, como as variáveis preditivas, por exemplo, tornando
+explícito caso o modelo reproduza o viés.
+
 
 ### 3.3. Treinamento do modelo
 
-*(Seção a ser desenvolvida)*
+Utilizou-se os 4 conjuntos de dados de treinamento, treinando individualmente 4 modelos,
+um para cada método e um sem aplicação do método.
+
 
 ### 3.4. Avaliação do modelo
 
-*(Seção a ser desenvolvida)*
+Para avaliação do modelo fez-se uso de métricas padrões para avaliar o desempenho geral
+do modelo juntamente com métricas de equidade para verificar se houve algum impacto
+sobre disparidades entre os grupos. Também, foi avaliado o modelo ocultando as *features*
+que poderiam carregar algum viés diretamente ao modelo para comparar o impacto de remover
+tais *features* com o uso dos métodos de pré-processamento.
+
 
 ---
 
 ## 4. Resultados e Discussão
 
-*(Seção a ser desenvolvida)*
+### 4.1. Análise Exploratória
 
 ---
 

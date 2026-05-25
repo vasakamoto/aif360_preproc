@@ -14,22 +14,19 @@ PROTECTED_ATTRIBUTES  = ["race"]
 PRIVILEGED_GROUP = [
         {"race" : 2},
         {"race" : 7},
-        {"race" : 8},
-        {"tier" : 6}
         ]
 UNPRIVILEGED_GROUP = [
         {"race" : 1},
         {"race" : 3},
         {"race" : 5},
-        {"tier" : 1}
         ]
 TARGET = "pass_bar"
 FAVORABLE_OUTCOME = 1
 
 DATASET = read_csv(PATH_ROOT / "dataset/bar_pass_prediction.csv")
 
-SELECTED_COLUMNS = ["zgpa", "lsat", "race", "tier", "fam_inc", "pass_bar"]
-SELECTED_QUANT = ["zgpa", "lsat"]
+SELECTED_COLUMNS = ["ugpa", "zgpa", "lsat", "race", "tier", "fam_inc", "pass_bar"]
+SELECTED_QUANT = ["ugpa", "zgpa", "lsat"]
 SELECTED_QUALI = ["race", "tier", "fam_inc"]
 
 # YEAH, IT WOULD BE GREAT TO SEPARATE MODELS FROM OTHER KEY CONFIGS, BUT... I THOUGHT
