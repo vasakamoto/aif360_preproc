@@ -725,17 +725,7 @@ there is a weak correlation with **tier** (0.109763).
 
 # MULTIVARIATE ANALYSIS
 
-Through **principal component analysis** becomes clear that **age**, **fulltime** and
-**gender** have almost no value for the model. Also, through **spearman correlation 
-matrix** it is visible these features are dropable. The only feature that correlates
-with **gender** is **ugpa** and stills is a weak correlation, and their impact is miserable
-on the model. **Fulltime** and **age** correlates only between themselves and their
-impact over the model is also miserable as shown in the **principal component analysis**.
-
-Also, evaluating **variance inflation factor** and the above analysis, it becomes clear
-that **zgpa** and **zfygpa** are strongly correlated, which makes sense as explained
-in the previous section. **zfygpa** will be droped, because of this strong correlation
-and because zgpa tells a bigger picture about students overall performance.
+![Spearman correlation matrix](../../results/charts/multivariate/corr_matrix.png)
 
 **PRINCIPAL COMPONENT ANALYSIS**
 |          |   PC1_Weight |
@@ -765,4 +755,39 @@ and because zgpa tells a bigger picture about students overall performance.
 | tier     | 1.42369 |
 | age      | 1.17312 |
 
-![Spearman correlation matrix](../../results/charts/multivariate/corr_matrix.png)
+Through **principal component analysis** becomes clear that **age**, **fulltime** and
+**gender** have almost no value for the model. Also, through **spearman correlation 
+matrix** it is visible these features are dropable. The only feature that correlates
+with **gender** is **ugpa** and stills is a weak correlation, and their impact is miserable
+on the model. **Fulltime** and **age** correlates only between themselves and their
+impact over the model is also miserable as shown in the **principal component analysis**.
+
+Also, evaluating **variance inflation factor** and the above analysis, it becomes clear
+that **zgpa** and **zfygpa** are strongly correlated, which makes sense as explained
+in the previous section. **zfygpa** will be droped, because of this strong correlation
+and because zgpa tells a bigger picture about students overall performance.
+
+
+# CONCLUSION
+
+With the above ançalysis the most significative columns are the following:
+
+**SELECTED FEATURES**:
+- ugpa;
+- zgpa;
+- lsat;
+- race;
+- tier;
+- fam_inc;
+- pass_bar;
+
+**DROPED FEATURES**:
+- age;
+- gender (male);
+- fulltime;
+
+Race cannot be excluded because as justified above, the predictive features can be used
+to recreate bias.
+
+Tier have a significance bias also with a disparate impact of 0.79.
+Family income was selected also because it is not clear if might impact bias or not.
