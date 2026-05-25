@@ -16,12 +16,12 @@ TRUE RAW METRICS
 |  9 | validation_recall             |      1     |                0.889 |          0.877 |
 | 10 | validation_f1                 |      0.979 |                0.847 |          0.84  |
 | 11 | validation_roc_auc            |      0.87  |                0.897 |          0.897 |
-| 12 | statistical_parity_difference |     -0.015 |               -0.573 |         -0.549 |
-| 13 | disparate_impact              |      0.985 |                0.322 |          0.342 |
-| 14 | equal_opportunity_difference  |     -0.001 |               -0.392 |         -0.359 |
-| 15 | average_odds_difference       |     -0.038 |               -0.41  |         -0.379 |
-| 16 | false_positive_rate_diff      |     -0.074 |               -0.428 |         -0.398 |
-| 17 | false_discovery_rate_diff     |      0.129 |                0.173 |          0.178 |
+| 12 | statistical_parity_difference |     -0.023 |               -0.677 |         -0.652 |
+| 13 | disparate_impact              |      0.977 |                0.194 |          0.213 |
+| 14 | equal_opportunity_difference  |     -0.002 |               -0.547 |         -0.514 |
+| 15 | average_odds_difference       |     -0.046 |               -0.509 |         -0.477 |
+| 16 | false_positive_rate_diff      |     -0.09  |               -0.472 |         -0.44  |
+| 17 | false_discovery_rate_diff     |      0.16  |                0.214 |          0.228 |
 
 
 ____________________________________________________________________________________________________

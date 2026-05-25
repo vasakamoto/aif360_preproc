@@ -14,15 +14,14 @@ PROTECTED_ATTRIBUTES  = ["race"]
 PRIVILEGED_GROUP = [
         {"race" : 2},
         {"race" : 7},
+        {"race" : 8},
+        {"tier" : 6}
         ]
 UNPRIVILEGED_GROUP = [
-        {"race" : 0},
         {"race" : 1},
         {"race" : 3},
-        {"race" : 4},
         {"race" : 5},
-        {"race" : 6},
-        {"race" : 8},
+        {"tier" : 1}
         ]
 TARGET = "pass_bar"
 FAVORABLE_OUTCOME = 1

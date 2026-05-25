@@ -8,23 +8,71 @@ Faculdade de Tecnologia de FATEC Ribeirão Preto (FATEC) — Ribeirão Preto, SP
 
 ## Resumo
 
-Modelos preditivos estão sujeitos a vieses presentes em todas as etapas do processo de aprendizagem, desde a coleta de dados, pelos algoritmos usados para treinar o modelo, até a validação feita por um ser humano. Devido ao crescente uso e presença de tais modelos, desde recomendações de vídeos até seleção de crédito para financiamento, assim, faz-se necessário métodos para identificar e mitigar tais vieses, tal necessidade resultou na insurgência de um novo campo de estudo, AI Fairness. O presente trabalho visa realizar um estudo comparativo entre métodos de mitigação de viés aplicados individualmente, também, comparando o impacto combinando os métodos.
+Modelos preditivos estão sujeitos a vieses presentes em todas as etapas do processo 
+de aprendizagem, desde a coleta de dados, pelos algoritmos usados para treinar o modelo,
+até a validação feita por um ser humano. Devido ao crescente uso e presença de tais 
+modelos, desde recomendações de vídeos até seleção de crédito para financiamento, assim,
+faz-se necessário métodos para identificar e mitigar tais vieses, tal necessidade resultou
+na insurgência de um novo campo de estudo, AI Fairness. O presente trabalho visa realizar
+um estudo comparativo entre métodos de mitigação de viés aplicados individualmente, 
+também, comparando o impacto combinando os métodos.
 
-**Palavras-chave:** Análise preditiva, algoritmos discriminatórios, aprendizagem de máquina, AI Fairness 360.
+**Palavras-chave:** Análise preditiva, algoritmos discriminatórios, aprendizagem de 
+máquina, AI Fairness 360.
 
-**Keywords:** Predictive analytics, discriminatory algorithms, machine learning, AI Fairness 360.
+**Keywords:** Predictive analytics, discriminatory algorithms, machine learning, AI 
+Fairness 360.
 
 ---
 
 ## 1. Introdução
 
-O uso de sistemas inteligentes não é algo inédito, sendo utilizados há décadas para apoiar operadores de usinas elétricas (WONG, 1990), em trabalhos relacionados a contabilidade (O'LEARY; O'KEEFE, 1997), entre outras aplicações como detecção de fraudes, recomendações, etc. Tendo em vista que a qualidade de aprendizado de máquinas está sujeito a qualidade dos dados (HU, 2025), assim, um modelo que é treinado sobre um dataset enviesado resultará em respostas enviesadas, de tal maneira, tais sistemas podem acarretar em decisões errôneas e injustas. Por exemplo, Lambrecht e Tucker (2019) relatam sobre algoritmos que consideravam jovens mulheres como um grupo caro para entrega de propagandas sobre profissões nas áreas de ciências, tecnologia, engenharia e matemática (STEM fields); também, outro exemplo é o sistema Correctional Offender Management Profiling for Alternative Sanctions (COMPAS), sistema que avalia o risco de a pessoa ser reincidente em algum delito, que possui maiores taxas de falsos positivos para pessoas negras (MEHRABI et al, 2021).
+O uso de sistemas inteligentes não é algo inédito, sendo utilizados há décadas para 
+apoiar operadores de usinas elétricas (WONG, 1990), em trabalhos relacionados a contabilidade
+(O'LEARY; O'KEEFE, 1997), entre outras aplicações como detecção de fraudes, recomendações,
+etc. Tendo em vista que a qualidade de aprendizado de máquinas está sujeito a qualidade
+dos dados (HU, 2025), assim, um modelo que é treinado sobre um dataset enviesado resultará
+em respostas enviesadas, de tal maneira, tais sistemas podem acarretar em decisões errôneas
+e injustas. Por exemplo, Lambrecht e Tucker (2019) relatam sobre algoritmos que consideravam
+jovens mulheres como um grupo caro para entrega de propagandas sobre profissões nas áreas
+de ciências, tecnologia, engenharia e matemática (STEM fields); também, outro exemplo
+é o sistema Correctional Offender Management Profiling for Alternative Sanctions (COMPAS),
+sistema que avalia o risco de a pessoa ser reincidente em algum delito, que possui maiores
+taxas de falsos positivos para pessoas negras (MEHRABI et al, 2021).
 
-Assim, métodos para mitigar vieses tornam-se uma necessidade, porém, a compreensão de que para mitigar tais vieses basta tratar o dataset é reducionista por não compreender que em alguns casos, especialmente casos envolvendo grupos sociais desfavorecidos, para identificar um viés deve-se ir além de tratamentos estatísticos, necessitando um olhar político, social, econômico, ecológico, etc., de forma que o problema de viés em aprendizado de máquinas não é normativamente distinto (HU, 2025). Essa compreensão, de que não é normativamente distinto, torna-se evidente quando compreende-se que vieses estão presentes em todas as etapas do processo de aprendizagem (MAVROGIORGOS et al, 2024), desde a coleta, ao processamento, até a análise dos resultados. Isso, pois a fonte de viés é a própria realidade e sociedade, sendo os dados apenas reflexos da sociedade (HU, 2025). De tal forma, a compreensão sobre viés é invariavelmente multidisciplinar e complexa, havendo definições ligeiramente diferentes entre os campos, porém, em vias gerais, é compreendido como um desvio sistemático da verdade (BUETER, 2022), especificamente na área de Fairness em aprendizado de máquina um viés pode ser compreendido como um modelo cujo resultados favorecem ou discriminam sistematicamente determinados grupos baseados em atributos sensíveis (MEHRABI et al, 2021).
+Assim, métodos para mitigar vieses tornam-se uma necessidade, porém, a compreensão de
+que para mitigar tais vieses basta tratar o dataset é reducionista por não compreender
+que em alguns casos, especialmente casos envolvendo grupos sociais desfavorecidos, para
+identificar um viés deve-se ir além de tratamentos estatísticos, necessitando um olhar
+político, social, econômico, ecológico, etc., de forma que o problema de viés em aprendizado
+de máquinas não é normativamente distinto (HU, 2025). Essa compreensão, de que não é 
+normativamente distinto, torna-se evidente quando compreende-se que vieses estão presentes
+em todas as etapas do processo de aprendizagem (MAVROGIORGOS et al, 2024), desde a coleta,
+ao processamento, até a análise dos resultados. Isso, pois a fonte de viés é a própria
+realidade e sociedade, sendo os dados apenas reflexos da sociedade (HU, 2025). De tal
+forma, a compreensão sobre viés é invariavelmente multidisciplinar e complexa, havendo
+definições ligeiramente diferentes entre os campos, porém, em vias gerais, é compreendido
+como um desvio sistemático da verdade (BUETER, 2022), especificamente na área de Fairness
+em aprendizado de máquina um viés pode ser compreendido como um modelo cujo resultados
+favorecem ou discriminam sistematicamente determinados grupos baseados em atributos 
+sensíveis (MEHRABI et al, 2021).
 
-Mesmo que vieses estejam presentes em todas as etapas do ciclo de vida de aprendizado de máquinas, os métodos de mitigação utilizados em AI Fairness se ocupam, majoritariamente, nas etapas adjacentes ao processamento. De tal forma, não cabe a tais métodos mitigar vieses decorrentes das etapas de coleta e de análise. Conforme posto por Mehrabi et al (2021) em sua revisão, os métodos podem ser categorizados em 3: pré-processamento, em processamento e pós-processamento. O primeiro método tenta remover os vieses transformando e modificando os dados de treinamento. Técnicas em processamento tentam remover viés durante o treinamento do modelo, alterando funções objetivo ou novas restrições aos modelos. O último método é utilizado quando os algoritmos usados para treinamento são tratados como caixa preta, sendo efetuado a mitigação após o treinamento fazendo uso de um conjunto de validação.
+Mesmo que vieses estejam presentes em todas as etapas do ciclo de vida de aprendizado
+de máquinas, os métodos de mitigação utilizados em AI Fairness se ocupam, majoritariamente,
+nas etapas adjacentes ao processamento. De tal forma, não cabe a tais métodos mitigar
+vieses decorrentes das etapas de coleta e de análise. Conforme posto por Mehrabi et 
+al (2021) em sua revisão, os métodos podem ser categorizados em 3: pré-processamento,
+em processamento e pós-processamento. O primeiro método tenta remover os vieses transformando
+e modificando os dados de treinamento. Técnicas em processamento tentam remover viés
+durante o treinamento do modelo, alterando funções objetivo ou novas restrições aos 
+modelos. O último método é utilizado quando os algoritmos usados para treinamento são
+tratados como caixa preta, sendo efetuado a mitigação após o treinamento fazendo uso 
+de um conjunto de validação.
 
-O presente trabalho visa comparar o impacto de diferentes métodos de mitigação de viés em pré-processamento da ferramenta proprietária da IBM AI Fairness 360, serão utilizados datasets com diferentes características para analisar o impacto desses métodos, sendo Random Forests o modelo base para treinamento.
+O presente trabalho visa comparar o impacto de diferentes métodos de mitigação de viés
+em pré-processamento da ferramenta proprietária da IBM AI Fairness 360, serão utilizados
+datasets com diferentes características para analisar o impacto desses métodos, sendo
+Random Forests o modelo base para treinamento.
 
 ---
 
@@ -32,32 +80,70 @@ O presente trabalho visa comparar o impacto de diferentes métodos de mitigaçã
 
 ### 2.1. Viés
 
-Como supracitado, a definição do conceito de viés diverge entre diferentes áreas, porém, mais precisamente, em equidade de aprendizado de máquina, viés pode ser identificado quando não há independência entre atributos sensíveis (S) e a predição (Y), de tal forma que um atributo sensível influencie na probabilidade de predição de um resultado. Essa independência é mensurada através de métricas de equidade.
+Como supracitado, a definição do conceito de viés diverge entre diferentes áreas, porém,
+mais precisamente, em equidade de aprendizado de máquina, viés pode ser identificado quando
+não há independência entre atributos sensíveis (S) e a predição (Y), de tal forma que
+um atributo sensível influencie na probabilidade de predição de um resultado. Essa 
+independência é mensurada através de métricas de equidade.
 
 ### 2.2. Fairness
 
-Assim como o conceito de viés é difícil de ser definido, o conceito de equidade (Fairness) também resvala em diferentes definições entre as distintas áreas do conhecimento. De maneira geral, equidade pode ser compreendida como a ausência de viés em aprendizado de máquinas.
+Assim como o conceito de viés é difícil de ser definido, o conceito de equidade (Fairness)
+também resvala em diferentes definições entre as distintas áreas do conhecimento. De 
+maneira geral, equidade pode ser compreendida como a ausência de viés em aprendizado 
+de máquinas.
 
 ### 2.3. Métricas de avaliação
 
-A capacidade de generalização de um modelo é avaliada através de métricas que estão associadas com as taxas com que o modelo acerta ou erra. Essas métricas são particulares ao tipo de variável a ser avaliada, se contínua ou discreta, consequentemente, modelos de regressão e classificação, respectivamente.
+A capacidade de generalização de um modelo é avaliada através de métricas que estão 
+associadas com as taxas com que o modelo acerta ou erra. Essas métricas são particulares
+ao tipo de variável a ser avaliada, se contínua ou discreta, consequentemente, modelos
+de regressão e classificação, respectivamente.
 
 #### 2.3.1. Métricas de classificação
 
-Os modelos de classificação, especialmente os de classificação binária, são avaliados a partir da matriz de confusão, da qual se originam as métricas de classificação, mais especificamente as métricas de limiares.
+Os modelos de classificação, especialmente os de classificação binária, são avaliados
+a partir da matriz de confusão, da qual se originam as métricas de classificação, mais
+especificamente as métricas de limiares.
 
-A matriz de confusão compreende-se em colunas que representam as classes reais e as linhas as previstas. Assim, tem-se uma distribuição entre classificações cujas previsões representam a realidade, verdadeiras (TP e TN), e previsões equivocadas, falsas (FP e FN).
+A matriz de confusão compreende-se em colunas que representam as classes reais e as 
+linhas as previstas. Assim, tem-se uma distribuição entre classificações cujas previsões
+representam a realidade, verdadeiras (TP e TN), e previsões equivocadas, falsas (FP e
+FN).
 
 |  | Classe real positiva | Classe real negativa |
 |---|---|---|
 | **Classe prevista positiva** | Verdadeiro positivo (TP) | Falso positivo (FP) |
 | **Classe prevista negativa** | Falso negativo (FN) | Verdadeiro negativo (TN) |
 
-Operando sobre essas distribuições obtém-se métricas de limiares para avaliação de modelos classificatórios. As métricas devem ser avaliadas em conjunto e com o devido contexto, isso pois cada métrica avalia um aspecto do modelo, por exemplo, situações como a previsão de alguma doença exige uma maior sensibilidade à uma maior acurácia, tendo que falsos negativos são mais críticos que falsos positivos.
+Operando sobre essas distribuições obtém-se métricas de limiares para avaliação de 
+modelos classificatórios. As métricas devem ser avaliadas em conjunto e com o devido 
+contexto, isso pois cada métrica avalia um aspecto do modelo, por exemplo, situações 
+como a previsão de alguma doença exige uma maior sensibilidade à uma maior acurácia, 
+tendo que falsos negativos são mais críticos que falsos positivos.
 
-Além das métricas de limiares é comum o uso de métricas de ranqueamento, sendo as mais comuns as curvas de precisão-sensibilidade (PR) e a de característica de operação do receptor (ROC), ambas descrevem o desempenho do classificador se baseando sobre diversos limiares de decisão. A primeira avalia a compensação que o modelo apresenta entre precisão e sensibilidade sendo uma métrica mais conservadora ao considerar a compensação entre o quanto o modelo prevê como correto e o quanto acerta corretamente, o que demonstra a eficácia do modelo em identificar uma classe como positiva como correta em relação com a prevista erroneamente como positiva. Já a curva ROC descreve a compensação entre a taxa de falsos positivos e a sensibilidade, o quanto o modelo acerta corretamente para as classes positivas e o quanto erra para as classes verdadeiramente negativas, o que possibilita avaliar a capacidade de distinção entre as classes pelo modelo.
+Além das métricas de limiares é comum o uso de métricas de ranqueamento, sendo as mais
+comuns as curvas de precisão-sensibilidade (PR) e a de característica de operação do 
+receptor (ROC), ambas descrevem o desempenho do classificador se baseando sobre diversos
+limiares de decisão. A primeira avalia a compensação que o modelo apresenta entre precisão
+e sensibilidade sendo uma métrica mais conservadora ao considerar a compensação entre
+o quanto o modelo prevê como correto e o quanto acerta corretamente, o que demonstra 
+a eficácia do modelo em identificar uma classe como positiva como correta em relação 
+com a prevista erroneamente como positiva. Já a curva ROC descreve a compensação entre
+a taxa de falsos positivos e a sensibilidade, o quanto o modelo acerta corretamente 
+para as classes positivas e o quanto erra para as classes verdadeiramente negativas, 
+o que possibilita avaliar a capacidade de distinção entre as classes pelo modelo.
 
-Através da representação gráfica é possível visualizar tal compensação, observando os extremos tem-se que na curva ROC o ideal reside na ordenada, quando a taxa de verdadeiros positivos é máxima e a taxa de falsos positivos é mínima enquanto que o diametralmente oposto indica que o modelo alerta incondicionalmente positivos. Através da curva PR identifica-se que o ideal reside sobre o ponto (1, 1) no qual o modelo é capaz de prever corretamente as classes positivas, porém o comportamento típico da curva é decrescente, de forma que quanto maior a sensibilidade menor a precisão, isso porque ao ajustar o modelo para ser mais leniente com o limiar de decisão (maior sensibilidade) o modelo acusará mais facilmente uma classe como positiva com menos rigor, se o modelo for mais rigoroso há menos falsos positivos, porém, haverá mais falsos negativos.
+Através da representação gráfica é possível visualizar tal compensação, observando os
+extremos tem-se que na curva ROC o ideal reside na ordenada, quando a taxa de verdadeiros
+positivos é máxima e a taxa de falsos positivos é mínima enquanto que o diametralmente
+oposto indica que o modelo alerta incondicionalmente positivos. Através da curva PR 
+identifica-se que o ideal reside sobre o ponto (1, 1) no qual o modelo é capaz de prever
+corretamente as classes positivas, porém o comportamento típico da curva é decrescente,
+de forma que quanto maior a sensibilidade menor a precisão, isso porque ao ajustar o
+modelo para ser mais leniente com o limiar de decisão (maior sensibilidade) o modelo 
+acusará mais facilmente uma classe como positiva com menos rigor, se o modelo for mais
+rigoroso há menos falsos positivos, porém, haverá mais falsos negativos.
 
 **Principais métricas para avaliação de modelos classificatórios:**
 
@@ -100,7 +186,10 @@ Assim, para que um modelo seja justo as probabilidades de predição devem ser s
 
 ### 2.5. Random Forests
 
-O modelo base, Random Forest, é um classificador baseado em um conjunto de árvores de decisão que são treinadas com um subconjunto aleatório do dataset utilizando um subconjunto aleatório de atributos, sendo que cada árvore emite um voto para uma variável-alvo, sendo selecionado o voto majoritário (BREIMAN, 2001).
+O modelo base, Random Forest, é um classificador baseado em um conjunto de árvores de
+decisão que são treinadas com um subconjunto aleatório do dataset utilizando um subconjunto
+aleatório de atributos, sendo que cada árvore emite um voto para uma variável-alvo, 
+sendo selecionado o voto majoritário (BREIMAN, 2001).
 
 ### 2.6. Métodos de mitigação em pré-processamento
 
@@ -108,7 +197,14 @@ Métodos em pré-processamento focam na qualidade dos dados.
 
 #### 2.6.1. Reweighting
 
-Reweighting é um método relativamente simples e não intrusivo no qual são aplicados pesos sobre as tuplas para tornar os atributos protegidos independentes estatisticamente da variável-alvo; um atributo protegido pode ser compreendido como qualquer característica inata ou adquirida cuja discriminação baseada sobre essas seja ilegal, como gênero e etnia, por exemplo (BAROCAS; HARDT; NARAYANAN, 2023). Conforme posto por Kamiran e Calders (2012), o peso é obtido através da proporção entre a probabilidade esperada, P_exp, e a observada, P_obs. Sendo a probabilidade dada pela frequência de tuplas contendo os atributos sensíveis no dataset, D. Assim:
+Reweighting é um método relativamente simples e não intrusivo no qual são aplicados 
+pesos sobre as tuplas para tornar os atributos protegidos independentes estatisticamente
+da variável-alvo; um atributo protegido pode ser compreendido como qualquer característica
+inata ou adquirida cuja discriminação baseada sobre essas seja ilegal, como gênero e
+etnia, por exemplo (BAROCAS; HARDT; NARAYANAN, 2023). Conforme posto por Kamiran e Calders
+(2012), o peso é obtido através da proporção entre a probabilidade esperada, P_exp, e
+a observada, P_obs. Sendo a probabilidade dada pela frequência de tuplas contendo os 
+atributos sensíveis no dataset, D. Assim:
 
 \[P(S = b \wedge Class = +) := \frac{|\{X \in D \mid X(S) = b\}|}{|D|} \times \frac{|\{X \in D \mid X(Class) = +\}|}{|D|}\]
 
@@ -116,11 +212,27 @@ Reweighting é um método relativamente simples e não intrusivo no qual são ap
 
 #### 2.6.2. Disparate Impact Remover
 
-*(Seção a ser desenvolvida)*
+O Disparate Impact Remover, fundamentado no trabalho de Feldman et al. (2015), foca 
+na edição dos atributos contínuos ou ordinais do conjunto de dados para que as distribuições
+marginais condicionais desses atributos sejam idênticas entre o grupo privilegiado e 
+o desprivilegiado. O algoritmo preserva a ordenação (ranqueamento) dos indivíduos dentro
+de seus próprios grupos constitutivos, mas altera os valores numéricos absolutos removendo
+a capacidade do modelo preditivo de discriminar indiretamente com base em variáveis 
+fortemente correlacionadas com o atributo protegido (discriminação por procuração ou 
+proxy).
 
 #### 2.6.3. Learning Fair Representations
 
-*(Seção a ser desenvolvida)*
+Proposto por Zemel et al. (2013), o método Learning Fair Representations formula a 
+mitigação de viés como um problema de otimização matemática com objetivos conflitantes.
+Ele mapeia o espaço original de características para um espaço latente intermediário 
+probabilístico ($Z$). O sistema é otimizado para atingir três metas concomitantes:
+Perda de Informação: Garantir que a representação latente retenha o máximo de fidelidade
+possível em relação aos dados originais $X$.Utilidade Preditiva: Garantir que a representação
+latente mapeie com precisão o rótulo real $Y$.Ofuscação de Equidade: Garantir que toda
+e qualquer informação a respeito do atributo protegido $A$ seja completamente eliminada,
+impossibilitando um decodificador ou classificador downstream de reconstruir ou identificar
+o grupo de pertença do indivíduo a partir de $Z$.
 
 #### 2.6.4. Optimized Preprocessing
 
@@ -130,7 +242,8 @@ Reweighting é um método relativamente simples e não intrusivo no qual são ap
 
 ## 3. Metodologia
 
-A metodologia empregada neste trabalho é baseada sobre o modelo apresentado por Yip (2020) o qual descreve o ciclo de vida de aprendizado de máquinas em 7 etapas:
+A metodologia empregada neste trabalho é baseada sobre o modelo apresentado por Yip 
+(2020) o qual descreve o ciclo de vida de aprendizado de máquinas em 7 etapas:
 
 1. Coleta de dados
 2. Preparação de dados
@@ -140,7 +253,11 @@ A metodologia empregada neste trabalho é baseada sobre o modelo apresentado por
 6. Implantação do modelo
 7. Monitoramento e manutenção
 
-O presente estudo utilizará apenas as etapas 2 à 5, pois o intuito do trabalho é apenas avaliar o impacto dos métodos de mitigação sobre modelos de aprendizagem. Também, o dataset utilizado foi o Law School GPA, dataset canônico utilizado como referência para testar algoritmos de mitigação de viés. Como é um dataset de referência já embarcado com a ferramenta AI Fairness 360 não há coleta de dados.
+O presente estudo utilizará apenas as etapas 2 à 5, pois o intuito do trabalho é apenas
+avaliar o impacto dos métodos de mitigação sobre modelos de aprendizagem. Também, o 
+dataset utilizado foi o Law School GPA, dataset canônico utilizado como referência para 
+testar algoritmos de mitigação de viés. Como é um dataset de referência já embarcado 
+com a ferramenta AI Fairness 360 não há coleta de dados.
 
 ### 3.1. Preparação de dados
 

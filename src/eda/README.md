@@ -480,35 +480,16 @@ First, checking the contigency table with **pass_bar** we have the following:
 have a failure rate of 22.19% within this group. This by itself might skew the prediction
 for this group. We have other groups such 1 (indigenous folk) and 5 (mexican) that have
 high failure rates, 18.10% and 20.80% respective, and having such a few samples makes
-it a more instable group. To check if it has statistical significance it was used 
-chi-square test to check independency between race and approval.
+it a more instable group.
 
-|   race |     1 |   0 |   expected_1 |   expected_0 |   delta_1 |   delta_0 |
-|-------:|------:|----:|-------------:|-------------:|----------:|----------:|
-|      7 | 18087 | 629 |        17740 |          975 |       347 |      -346 |
-|      4 |   350 |  46 |          375 |           20 |       -25 |        26 |
-|      2 |   827 |  70 |          850 |           46 |       -23 |        24 |
-|      3 |  1045 | 298 |         1273 |           69 |      -228 |       229 |
-|      6 |   450 |  56 |          479 |           26 |       -29 |        30 |
-|      8 |   280 |  23 |          287 |           15 |        -7 |         8 |
-|      1 |    86 |  19 |           99 |            5 |       -13 |        14 |
-|      5 |    99 |  26 |          118 |            6 |       -19 |        20 |
-
-**Chi squared**: 1093.7736
-
-**P-value**: 0.0000
-
-Such a low value for **p-value** might indicates that the null hypothesis is discarted and
-conclude that it has some dependency between these variables. But, chi-square might be
-influenced by sample size, to be sure of this impact it was calculated the **Cramer's
-V** which resulted in a value of 0.220314, meaning that this feature have a moderate
-dependency.
-
-To check if this dependency can be justified by the predictive features or if this
+The **Cramer's V** for **bar approval**, which resulted in a value of 0.220314, indicates
+that there is a moderate dependency them, which indicates a bias towards this attribute.
+To check if this dependency can be justified by the predictive features or if this 
 dependency is arbitrary to see if this possible bias originates from some socioeconomic
 / historical bias or if there is some direct bias towards these groups.
 
-Looking at the **Kruskal-Wallis** test to check if 
+Looking at the **Kruskal-Wallis** test to check if the predictive features are evenly
+distributed or if these features are disbalanced.
 
 | label   |       p_race |   s_race |
 |:--------|-------------:|---------:|
@@ -518,5 +499,270 @@ Looking at the **Kruskal-Wallis** test to check if
 | zgpa    | 0            | 2014.31  |
 | age     | 2.9028e-19   | 102.759  |
 
+With the test is clear that predictive features aren't evenly distributed between races,
+this might indicate that predictive features can be proxy for bias. This possible proxy
+can be better illustrated by the violin charts bellow:
+
+![Violin chart lsat x race](../../results/charts/multivariate/violin_race_lsat.png)
+
+![Violin chart ugpa x race](../../results/charts/multivariate/violin_race_ugpa.png)
+
+![Violin chart zfygpa x race](../../results/charts/multivariate/violin_race_zfygpa.png)
+
+![Violin chart zgpa x race](../../results/charts/multivariate/violin_race_zgpa.png)
+
+In general, it can observed that all groups have different score between them, with
+the exception of groups 1 (indigenous), 4 (porto rico) and 5 (mexican). This differences
+between these groups can be illustrated clearly with the violin charts and with their
+**disparate impacts** **statistical parity differences**. In every feature the group
+3 underperforms in comparison with other groups. 
+
+|   privileged_group |   priv_rate |   unprivileged_group |   unpriv_rate |   disparate_impact |   statistical_parity_difference |
+|:-------------------|------------:|---------------------:|--------------:|-------------------:|--------------------------------:|
+|                  7 |    0.966392 |                    1 |      0.819048 |           0.847531 |                     -0.147345   |
+|                  7 |    0.966392 |                    2 |      0.921962 |           0.954025 |                     -0.0444303  |
+|                  7 |    0.966392 |                    3 |      0.778109 |           0.805168 |                     -0.188284   |
+|                  7 |    0.966392 |                    4 |      0.883838 |           0.914575 |                     -0.082554   |
+|                  7 |    0.966392 |                    5 |      0.792    |           0.819543 |                     -0.174392   |
+|                  7 |    0.966392 |                    6 |      0.889328 |           0.920256 |                     -0.0770643  |
+|                  7 |    0.966392 |                    8 |      0.924092 |           0.956229 |                     -0.0423     |
+
+This implies that simply discarding the race feature will not result in a fair model
+because the bias is not directly in the dataset, the bias is socioeconomic. Even if
+race was removed the model (Random Forests) would recreate bias through predictive
+features.
+
+
+## GENDER
+
+Gender fits into the definition for what might configure as a protected attribute. But,
+looking at the contigency table bellow doesn't look like there is a huge difference
+within this category.
+
+|           |   abs_frequency |   rel_frequency_tot |   rel_f_male_by_pass_bar |   rel_f_pass_bar_by_male |
+|:----------|----------------:|--------------------:|-------------------------:|-------------------------:|
+| (0, 0)    |             568 |                2.53 |                  5.78058 |               48.5885    |
+| (0, 1)    |            9258 |               41.32 |                 94.2194  |               43.5917    |
+| (1, 0)    |             601 |                2.68 |                  4.77894 |               51.4115    |
+| (1, 1)    |           11975 |               53.44 |                 95.2211  |               56.3848    |
+| (<NA>, 1) |               5 |                0.02 |                nan       |                0.0235427 |
+
+![Relative frequency for gender and approval](../../results/charts/bivariate/stacked_pass_bar_male.png)
+
+Checking the Cramer's V we have a value of 0.0211153 which is inexpressive, but the
+Kruskal-Wallis test accuses that might be some difference in distribution between these
+groups.
+
+| label   |      p_male |     s_male |
+|:--------|------------:|-----------:|
+| lsat    | 2.58072e-28 | 121.779    |
+| ugpa    | 7.94825e-87 | 390.081    |
+| zfygpa  | 5.8033e-12  |  47.3949   |
+| zgpa    | 0.355348    |   0.854267 |
+
+Looking at the violin charts we see that there is no significative difference between
+these groups, which is corroborated by **disparate impact** and **statistical parity
+difference**, favoring dropping this column.
+
+|   privileged_group |   priv_rate |   unprivileged_group |   unpriv_rate |   disparate_impact |   statistical_parity_difference |
+|:-------------------|------------:|---------------------:|--------------:|-------------------:|--------------------------------:|
+|                  1 |    0.952211 |                    0 |      0.942194 |           0.989481 |                     -0.0100164  |
+
+![Distribution between gender and lsat](../../results/charts/bivariate/violin_male_lsat.png)
+
+![Distribution between gender and ugpa](../../results/charts/bivariate/violin_male_ugpa.png)
+
+![Distribution between gender and zfygpa](../../results/charts/bivariate/violin_male_zfygpa.png)
+
+![Distribution between gender and zgpa](../../results/charts/bivariate/violin_male_zgpa.png)
+
+
+## AGE
+
+Age is the weirdest feature, the lack of samples for older groups impacts greatly the
+variance as the univariate analysis showed. Through the **point biserial test** it is
+shown that have no almost no correlation with bar approval.
+
+| label   |   correlation |      p_value |
+|:--------|--------------:|-------------:|
+| age     |    -0.0956216 | 1.71859e-46  |
+
+But **Kruskal-Wallis test** indicates otherwise:
+
+| label   |       p_race |   p_fulltime |    p_fam_inc |      p_male |   p_pass_bar |      p_tier |   s_race |   s_fulltime |   s_fam_inc |     s_male |   s_pass_bar |     s_tier |
+|:--------|-------------:|-------------:|-------------:|------------:|-------------:|------------:|---------:|-------------:|------------:|-----------:|-------------:|-----------:|
+| age     | 2.9028e-19   |  0           | 2.63473e-219 | 8.95889e-07 | 1.2637e-46   | 3.39277e-69 |  102.759 |   1979.78    |   1019.07   |  24.1398   |      205.583 |  330.081   |
+
+Also, the violin charts indicate otherwise:
+
+![Distribution between age and pass_bar](../../results/charts/bivariate/violin_pass_bar_age.png)
+
+There is no noticeable trend looking at the scatter plots for age:
+
+![Scatter plot age vs lsat](../../results/charts/bivariate/scatter_lsat_age.png)
+
+![Scatter plot age vs ugpa](../../results/charts/bivariate/scatter_ugpa.png)
+
+![Scatter plot age vs zfygpa](../../results/charts/bivariate/scatter_zfygpa_age.png)
+
+![Scatter plot age vs zgpa](../../results/charts/bivariate/scatter_zgpa_age.png)
+
+
+## FAMILY INCOME
+
+Family can be a strong bias factor, having that those with a better family income tends
+to have a background with better educational institutions, extracurricular activies and
+so on. But **Cramer's V** indicates that there is no strong correlation between family income
+and approval at the exam (V = 0.0867781). However, **Kruskal-Wallis test** indicates
+otherwise, having different distribution within this group
+
+| label   |    p_fam_inc |   s_fam_inc |
+|:--------|-------------:|------------:|
+| lsat    | 4.23459e-124 |    579.499  |
+| ugpa    | 3.19165e-07  |     35.7931 |
+| zfygpa  | 3.44223e-37  |    176.906  |
+| zgpa    | 2.89522e-40  |    191.222  |
+
+But, verifying disparate impact and statistical parity difference we see that there is
+no huge difference within this group, group 1 and 5 (poorest and richest) have a disparate
+impact of 0.894775 and a statistical parity difference of -0.10128, which is indicates
+that the poorer group have lower approval scores, but nothing significative as seem
+with race.
+
+|   privileged_group |   priv_rate |   unprivileged_group |   unpriv_rate |   disparate_impact |   statistical_parity_difference |
+|:-------------------|------------:|---------------------:|--------------:|-------------------:|--------------------------------:|
+|                  5 |    0.962514 |                    1 |      0.861233 |           0.894775 |                     -0.10128    |
+|                  5 |    0.962514 |                    2 |      0.912964 |           0.94852  |                     -0.04955    |
+|                  5 |    0.962514 |                    3 |      0.943389 |           0.98013  |                     -0.0191247  |
+|                  5 |    0.962514 |                    4 |      0.961314 |           0.998754 |                     -0.00119969 |
+
+Looking at the distribution between is visible that race is correlated with this feature.
+
+![Frequency between race and family income](../../results/charts/bivariate/stacked_fam_inc_race.png)
+
+Even though it has some significative values for Kruskal-Wallis test, the disparate
+impact and statistical parity difference with the low value for Cramer's V makes this
+feature dropable. The race bias is embedded in this feature already with the Cramer's
+V for race and family income showing a weak correlation (V = 0.121).
+
+## TIER
+
+Checking **Cramer's V** for pass_bar we have a significative value, indicating a weak 
+correlation with bar approval, **0.14156**. But observing the values for the **Kruskal-Wallis**
+it seens that the distribution with **zfygpa** and **zgpa**, which are the strongest 
+predictive feature, there is no significative difference in their distribution, this 
+is illustrated by the violin charts between these features. However, there is a strong
+difference between **lsat** and **ugpa**. These differences makes sense, because it's
+expected that after law school ingression their scores normalize.
+
+| label   |      p_tier |     s_tier |
+|:--------|------------:|-----------:|
+| lsat    | 0           | 4643.1     |
+| ugpa    | 0           | 2430.39    |
+| zfygpa  | 0.111271    |    8.94518 |
+| zgpa    | 0.574295    |    3.82896 |
+
+![Distribution between tier and lsat](../../results/charts/bivariate/violin_tier_lsat.png)
+
+![Distribution between tier and ugpa](../../results/charts/bivariate/violin_tier_ugpa.png)
+
+![Distribution between tier and zfygpa](../../results/charts/bivariate/violin_tier_zfygpa.png)
+
+![Distribution between tier and zgpa](../../results/charts/bivariate/violin_tier_zgpa.png)
+
+Also, the **Cramer's V** for **race** is significative, 0.125303. Acting as a stronger
+bias source then family income. This is corroborated by the **disparate impact** (0.792045)
+and **statistical parity difference** (-0.204209)
+
+|   privileged_group |   priv_rate |   unprivileged_group |   unpriv_rate |   disparate_impact |   statistical_parity_difference |
+|:-------------------|------------:|---------------------:|--------------:|-------------------:|--------------------------------:|
+|                  6 |    0.981986 |                    1 |      0.777778 |           0.792045 |                     -0.204209   |
+|                  6 |    0.981986 |                    2 |      0.916765 |           0.933582 |                     -0.0652213  |
+|                  6 |    0.981986 |                    3 |      0.946815 |           0.964184 |                     -0.0351712  |
+|                  6 |    0.981986 |                    4 |      0.960217 |           0.977831 |                     -0.0217694  |
+|                  6 |    0.981986 |                    5 |      0.953273 |           0.97076  |                     -0.0287129  |
+
+![Frequency between tier and bar approval](../../results/charts/bivariate/stacked_tier_pass_bar.png)
+
+![Frequency between tier and race](../../results/charts/bivariate/stacked_tier_race.png)
+
+## FULLTIME
+
+Full time dedication might seen as a source of bias, specially when observing **Kruskal
+-Wallis test**. But **Cramer's V** (0.0661584), **disparate impact** (0.941458) and 
+**statistical parity difference** (-0.0557471) indicates otherwise,
+
+| label   |   p_fulltime |   s_fulltime |
+|:--------|-------------:|-------------:|
+| lsat    |  1.72939e-55 |    246.223   |
+| ugpa    |  5.43982e-59 |    262.289   |
+| zfygpa  |  0.00868133  |      6.88724 |
+| zgpa    |  0.109672    |      2.55895 |
+| age     |  0           |   1979.78    |
+
+![Distribution between fulltime and lsat](../../results/charts/bivariate/violin_fulltime_lsat.png)
+
+![Distribution between fulltime and ugpa](../../results/charts/bivariate/violin_fulltime_ugpa.png)
+
+![Distribution between fulltime and zfygpa](../../results/charts/bivariate/violin_fulltime_zfygpa.png)
+
+![Distribution between fulltime and zgpa](../../results/charts/bivariate/violin_fulltime_zgpa.png)
+
+|    | variable   |   privileged_group |   priv_rate |   unprivileged_group |   unpriv_rate |   disparate_impact |   statistical_parity_difference |
+|---:|:-----------|-------------------:|------------:|---------------------:|--------------:|-------------------:|--------------------------------:|
+|  7 | fulltime   |                  1 |    0.952259 |                    2 |      0.896512 |           0.941458 |                     -0.0557471  |
+
+Also, values for **Cramer's V** for **race** (0.0303889) and for **family income** 
+(0.0769144) demonstrate that there is no direct correlation between them, however,
+there is a weak correlation with **tier** (0.109763).
+
+![Frequency between fulltime and bar approval](../../results/charts/bivariate/stacked_fulltime_pass_bar.png)
+
+![Frequency between fulltime and race](../../results/charts/bivariate/stacked_race_fulltime.png)
+
+![Frequency between fulltime and tier](../../results/charts/bivariate/stacked_fulltime_tier.png)
+
 
 # MULTIVARIATE ANALYSIS
+
+Through **principal component analysis** becomes clear that **age**, **fulltime** and
+**gender** have almost no value for the model. Also, through **spearman correlation 
+matrix** it is visible these features are dropable. The only feature that correlates
+with **gender** is **ugpa** and stills is a weak correlation, and their impact is miserable
+on the model. **Fulltime** and **age** correlates only between themselves and their
+impact over the model is also miserable as shown in the **principal component analysis**.
+
+Also, evaluating **variance inflation factor** and the above analysis, it becomes clear
+that **zgpa** and **zfygpa** are strongly correlated, which makes sense as explained
+in the previous section. **zfygpa** will be droped, because of this strong correlation
+and because zgpa tells a bigger picture about students overall performance.
+
+**PRINCIPAL COMPONENT ANALYSIS**
+|          |   PC1_Weight |
+|:---------|-------------:|
+| zgpa     |    0.51335   |
+| zfygpa   |    0.503006  |
+| lsat     |    0.419925  |
+| race     |    0.335608  |
+| ugpa     |    0.307452  |
+| tier     |    0.203609  |
+| fam_inc  |    0.185134  |
+| male     |    0.0374946 |
+| fulltime |   -0.0744161 |
+| age      |   -0.131474  |
+
+**VARIANCE INFLATION FACTOR**
+|          |       0 |
+|:---------|--------:|
+| race     | 1.22385 |
+| lsat     | 1.53981 |
+| ugpa     | 1.27036 |
+| zfygpa   | 4.23721 |
+| zgpa     | 4.38549 |
+| fulltime | 1.11346 |
+| fam_inc  | 1.10219 |
+| male     | 1.04605 |
+| tier     | 1.42369 |
+| age      | 1.17312 |
+
+![Spearman correlation matrix](../../results/charts/multivariate/corr_matrix.png)
