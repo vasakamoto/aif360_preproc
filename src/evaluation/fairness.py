@@ -13,7 +13,8 @@ from src.configs import (
         SplitDataset,
         TrainedModels,
         PRIVILEGED_GROUP,
-        UNPRIVILEGED_GROUP
+        UNPRIVILEGED_GROUP,
+        TRUNCATED_GREY
         )
 
 
@@ -113,11 +114,13 @@ def _prediction_frequency(model : RandomForestClassifier, split_ds : SplitDatase
 # 2. Plotar os gráficos lado a lado para comparação entre as raças
         fig, axes = plt.subplots(1, 2, figsize=(14, 6), sharey=True)
 
-        df_real_neg.plot(kind='bar', stacked=True, ax=axes[0], colormap='coolwarm')
+        df_real_neg.plot(kind='bar', stacked=True, ax=axes[0], cmap=TRUNCATED_GREY)
         axes[0].set_title('Distribuição dos Casos Reais Negativos')
-        axes[0].set_ylabel('Proporção')
+        axes[0].set_ylabel('Frequência Relativa')
+        axes[0].set_xlabel('Etnia')
+        axes[1].set_xlabel('Etnia')
 
-        df_real_pos.plot(kind='bar', stacked=True, ax=axes[1], colormap='viridis')
+        df_real_pos.plot(kind='bar', stacked=True, ax=axes[1], cmap=TRUNCATED_GREY)
         axes[1].set_title('Distribuição dos Casos Reais Positivos')
 
         plt.savefig(PATH_ROOT/"results"/"charts"/"evaluation"/f"stacked_{nm}")

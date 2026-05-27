@@ -5,6 +5,8 @@ from pathlib import Path
 from pandas import read_csv
 from aif360.algorithms import Transformer
 from aif360.datasets import BinaryLabelDataset
+import matplotlib.cm as cm
+import matplotlib.colors as mcolors
 from sklearn.ensemble import RandomForestClassifier
 
 
@@ -29,6 +31,26 @@ SELECTED_COLUMNS = ["ugpa", "zgpa", "lsat", "race", "tier", "fam_inc", "pass_bar
 SELECTED_QUANT = ["ugpa", "zgpa", "lsat"]
 SELECTED_QUALI = ["race", "tier", "fam_inc"]
 
+TRANSLATIONS = {
+        "age" : "Idade",
+        "fam_inc" : "Renda Familiar",
+        "fulltime" : "Dedicação Exclusiva",
+        "lsat" : "LSAT",
+        "male" : "Gênero",
+        "pass_bar" : "Aprovação",
+        "race" : "Etnia",
+        "tier" : "Tier",
+        "ugpa" : "UGPA",
+        "zfygpa" : "Z-score GPA Primeiro Ano",
+        "zgpa" : "Z-score GPA",
+        }
+
+HACHING_PATTERNS = ['//', '..', '\\\\', '||', '++', 'xx', 'oo']
+
+TRUNCATED_GREY = mcolors.LinearSegmentedColormap.from_list(
+    'truncated_grey', 
+    cm.Greys(range(80, 150))
+)
 # YEAH, IT WOULD BE GREAT TO SEPARATE MODELS FROM OTHER KEY CONFIGS, BUT... I THOUGHT
 # IT WOULD BE CONFUSING
 @dataclass

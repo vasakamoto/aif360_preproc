@@ -1,5 +1,9 @@
 
-from src.configs import PATH_ROOT
+from src.configs import (
+        PATH_ROOT,
+        TRANSLATIONS,
+        TRUNCATED_GREY
+        )
 
 from matplotlib import pyplot as plt
 from numpy import nan
@@ -43,8 +47,13 @@ def _distribution(s : Series) -> DataFrame:
 
 def _histogram(s : Series) -> None:
 
-    s.sort_index().plot(kind="bar", width=1.0, edgecolor="black")
-    plt.xlabel(f"{s.index.name}")
+    ax = s.sort_index().plot(kind="bar", width=1.0, edgecolor="black", cmap=TRUNCATED_GREY)
+    ax.set_title(f"Distribuição de {TRANSLATIONS.get(f"{s.index.name}", s.index.name)}")
+    ax.set_xlabel(f"{TRANSLATIONS.get(f"{s.index.name}", s.index.name)}")
+    ax.set_ylabel("Frequência")
+    ax.grid(axis='y', linestyle=':', alpha=0.6)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
     plt.tight_layout()
     plt.savefig(PATH_ROOT/"results"/"charts"/"univariate"/f"hist_{s.index.name}")
     plt.close()

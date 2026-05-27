@@ -1,5 +1,12 @@
 
-from src.configs import PATH_ROOT
+from itertools import cycle
+
+from src.configs import (
+        PATH_ROOT,
+        TRANSLATIONS,
+        HACHING_PATTERNS,
+        TRUNCATED_GREY
+        )
 
 from matplotlib import pyplot as plt
 from numpy import (
@@ -172,8 +179,21 @@ def _spearman_matrix(df : DataFrame) -> DataFrame:
 
     corr = df.corr(method="spearman")
 
-    sns.heatmap(corr, annot=True, cmap='RdBu_r', center=0, fmt='.2f')
-    plt.title(f"Pearson Matrix")
+    fig, ax = plt.subplots(figsize=(8, 6))
+    sns.heatmap(
+        corr, 
+        annot=True, 
+        cmap=TRUNCATED_GREY, 
+        center=0, 
+        fmt='.2f', 
+        linewidths=0.5, 
+        linecolor='black',
+        ax=ax
+    )
+    ax.set_title("Matriz de Spearman", fontsize=12, fontweight='bold', pad=12)
+    plt.xticks(rotation=45, ha='right')
+    plt.yticks(rotation=0)
+    plt.tight_layout()
     plt.savefig(PATH_ROOT/"results"/"charts"/"multivariate"/"corr_matrix")
     plt.close()
 
@@ -228,20 +248,27 @@ def _violin_plot(df : DataFrame, quanti : list[str], quali : list[str], target :
 
     for qt in quanti:
         for ql in quali:
-            sns.violinplot(
+            ax = sns.violinplot(
                 data=df[[qt, ql, target]], 
                 x=ql,
                 y=qt,
                 hue=target,
                 inner='quartile',
-                palette='muted',
+                palette='gray',
                 cut=0
             )
 
-            plt.title(f'{qt} X {ql}')
-            plt.xlabel(ql)
-            plt.ylabel(qt)
-            plt.grid(axis='y', alpha=0.3)
+            for collection, hatch_pattern in zip(ax.collections, cycle(HACHING_PATTERNS)):
+                collection.set_hatch(hatch_pattern)
+                collection.set_edgecolor('black')  # Ensures structural boundaries remain visible
+                collection.set_linewidth(1.5)
+
+            plt.title(f"{TRANSLATIONS.get(f"{ql}", ql)} X {TRANSLATIONS.get(f"{qt}", qt)}", fontsize=12, fontweight='bold', pad=12)
+            plt.xlabel(f"{TRANSLATIONS.get(f"{ql}", ql)}", fontsize=10)
+            plt.ylabel(f"{TRANSLATIONS.get(f"{qt}", qt)}", fontsize=10)
+            plt.grid(axis='y', alpha=0.3, linestyle=':')
+            ax.legend(title=TRANSLATIONS.get(f"{target}", target))
+            sns.despine()
 
             plt.tight_layout()
             plt.savefig(PATH_ROOT/"results"/"charts"/"multivariate"/f"violin_{ql}_{qt}")
@@ -263,16 +290,25 @@ def _stacked_bar(df : DataFrame, quali : list[str], target : str) -> None:
             for i, ft in enumerate(index):
                 data_subset = df_counts.xs(ft, level=idx)
                 data_relative = data_subset.div(data_subset.sum(axis=1), axis=0)
-                data_relative.plot(
+                ax = data_relative.plot(
                     kind='bar', 
                     stacked=True, 
+                    width=0.85,
                     ax=axes[i], 
-                    color=['#5b84c1', '#d99066'], 
-                    edgecolor='black'
+                    edgecolor='black',
+                    cmap=TRUNCATED_GREY
                 )
-                axes[i].set_title(f"{idx} = {ft} (Relative)")
-                axes[i].set_xlabel(var)
-                axes[i].set_ylabel("Proportion")
+
+                for container, hatch_pattern in zip(ax.containers, cycle(HACHING_PATTERNS)):
+                    for patch in container.patches:
+                        patch.set_hatch(hatch_pattern)
+                axes[i].set_title(f"Distribuição de {TRANSLATIONS.get(f'{idx}', idx)} = {ft}")
+                axes[i].set_xlabel(TRANSLATIONS.get(f'{var}', var))
+                axes[i].set_ylabel("Frequência Relativa")
+                axes[i].grid(axis='y', linestyle=':', alpha=0.6)
+                axes[i].spines['top'].set_visible(False)
+                axes[i].spines['right'].set_visible(False)
+                axes[i].legend(title=TRANSLATIONS.get(f"{var}", var))
                 axes[i].set_ylim(0, 1)
             plt.tight_layout()
             plt.savefig(PATH_ROOT/"results"/"charts"/"multivariate"/f"stacked_{idx}_{var}")

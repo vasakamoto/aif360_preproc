@@ -1,7 +1,13 @@
 
+from itertools import cycle
 from math import factorial
 
-from src.configs import PATH_ROOT
+from src.configs import (
+        PATH_ROOT,
+        TRANSLATIONS,
+        HACHING_PATTERNS,
+        TRUNCATED_GREY
+        )
 
 from matplotlib import pyplot as plt
 from numpy import (
@@ -51,7 +57,22 @@ def _contingency_table(df : DataFrame) -> DataFrame:
 def _stacked_bar(df : DataFrame, index : str, variable : str) -> None:
 
     plot = df[f"rel_f_{index}_by_{variable}"].unstack(level=variable)
-    plot.plot(kind="bar", stacked=True)
+    ax = plot.plot(kind="bar", stacked=True, width=0.85, edgecolor="black", cmap=TRUNCATED_GREY)
+
+    for container, hatch_pattern in zip(ax.containers, cycle(HACHING_PATTERNS)):
+        for patch in container.patches:
+            patch.set_hatch(hatch_pattern)
+
+    ax.set_title(f"Distribuição de {TRANSLATIONS.get(f'{index}', index)} por {TRANSLATIONS.get(f'{variable}', variable)}")
+    ax.set_xlabel(f"{TRANSLATIONS.get(f'{index}', index)}")
+    ax.set_ylabel("Frequência Relativa")
+
+    ax.legend(title=TRANSLATIONS.get(f"{variable}", variable))
+
+    ax.grid(axis='y', linestyle=':', alpha=0.6)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+
     plt.tight_layout()
     plt.savefig(PATH_ROOT/"results"/"charts"/"bivariate"/f"stacked_{index}_{variable}")
     plt.close()
@@ -153,19 +174,26 @@ def _coefficient_v(df : DataFrame, categ_feats : list) -> DataFrame:
 # QUANTI X QUALI
 def _violin_plot(df : DataFrame, quanti : str, quali : str) -> None:
 
-    sns.violinplot(
+    ax = sns.violinplot(
         data=df[[quanti, quali]], 
         x=quali,
         y=quanti,
         inner='quartile',
-        palette='muted',
+        palette='gray',
         cut=0
     )
 
-    plt.title(f'{quanti} X {quali}')
-    plt.xlabel(quali)
-    plt.ylabel(quanti)
-    plt.grid(axis='y', alpha=0.3)
+    for collection, hatch_pattern in zip(ax.collections, cycle(HACHING_PATTERNS)):
+        collection.set_hatch(hatch_pattern)
+        collection.set_edgecolor('black')  # Ensures structural boundaries remain visible
+        collection.set_linewidth(1.5)
+
+    plt.title(f"{TRANSLATIONS.get(f"{quali}", quali)} X {TRANSLATIONS.get(f"{quanti}", quanti)}", fontsize=12, fontweight='bold', pad=12)
+    plt.xlabel(f"{TRANSLATIONS.get(f"{quali}", quali)}", fontsize=10)
+    plt.ylabel(f"{TRANSLATIONS.get(f"{quanti}", quanti)}", fontsize=10)
+    plt.grid(axis='y', alpha=0.3, linestyle=':')
+    
+    sns.despine()
 
     plt.tight_layout()
     plt.savefig(PATH_ROOT/"results"/"charts"/"bivariate"/f"violin_{quali}_{quanti}")
@@ -253,31 +281,52 @@ def _kruskal_wallis(df : DataFrame, quali : list[str], quanti : list[str]) -> Da
 
 # QUANTI X QUANTI
 def _scatter_plot(df : DataFrame, var1 : str, var2 :str) -> None:
-    
-    df[[var1, var2]].plot.scatter(x=var1, y=var2, alpha=0.1, colormap="viridis")
-    plt.title(f'Dispersão {var1} {var2}')
-    plt.xlabel(var1)
-    plt.ylabel(var2)
 
-    plt.savefig(PATH_ROOT/"results"/"charts"/"bivariate"/f"scatter_{var1}_{var2}")
+    ax = df[[var1, var2]].plot.scatter(
+        x=var1,
+        y=var2,
+        alpha=0.2,
+        color='#444444',
+        edgecolors='black',
+        linewidths=0.5
+    )
+    ax.set_title(f'Dispersão: {TRANSLATIONS.get(f"{var1}", var1)} vs {TRANSLATIONS.get(f"{var2}", var2)}', fontsize=12, fontweight='bold', pad=12)
+    ax.set_xlabel(f"{TRANSLATIONS.get(f"{var1}", var1)}", fontsize=10)
+    ax.set_ylabel(f"{TRANSLATIONS.get(f"{var2}", var2)}", fontsize=10)
+    ax.grid(True, linestyle=':', alpha=0.5)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    plt.tight_layout()
+    plt.savefig(PATH_ROOT / "results" / "charts" / "bivariate" / f"scatter_{var1}_{var2}.png")
     plt.close()
 
-    return
 
-
-def _corr_matrix_heatmap(df : DataFrame, quanti : list[str]) -> DataFrame:
+def _corr_matrix_heatmap(df: DataFrame, quanti: list[str]) -> DataFrame:
 
     corr = df[quanti].corr(method="pearson")
-
-    with open(PATH_ROOT/"results"/"tables"/"bivariate.md", "a") as file:
+    with open(PATH_ROOT / "results" / "tables" / "bivariate.md", "a") as file:
         file.write("\n\nPEARSON MATRIX\n\n")
         corr.to_markdown(file)
         file.write("\n\n\n")
-        file.write("_"*100)
+        file.write("_" * 100)
 
-    sns.heatmap(corr, annot=True, cmap='RdBu_r', center=0, fmt='.2f')
-    plt.title(f"Pearson Matrix")
-    plt.savefig(PATH_ROOT/"results"/"charts"/"bivariate"/"corr_matrix")
+    fig, ax = plt.subplots(figsize=(8, 6))
+
+    sns.heatmap(
+        corr, 
+        annot=True, 
+        cmap=TRUNCATED_GREY, 
+        center=0, 
+        fmt='.2f', 
+        linewidths=0.5, 
+        linecolor='black',
+        ax=ax
+    )
+    ax.set_title("Matriz de Pearson", fontsize=12, fontweight='bold', pad=12)
+    plt.xticks(rotation=45, ha='right')
+    plt.yticks(rotation=0)
+    plt.tight_layout()
+    plt.savefig(PATH_ROOT / "results" / "charts" / "bivariate" / "corr_matrix.png", dpi=300)
     plt.close()
 
     return corr
